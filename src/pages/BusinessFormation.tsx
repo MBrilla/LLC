@@ -5,10 +5,10 @@ import '../styles/BusinessFormation.css';
 const BusinessFormation = () => {
   const businessTypes = [
     {
-      title: 'Limited Liability Company (LLC)',
+      title: 'Limited Liability Company \n(LLC)',
       description: 'Protect your personal assets while maintaining flexibility in management and taxation.',
       path: '/business/llc',
-      price: 'Starting at $99 + state fees',
+      price: 'Starting at $0 + state filing fees',
       features: [
         'Personal asset protection',
         'Flexible management structure',
@@ -17,10 +17,10 @@ const BusinessFormation = () => {
       ]
     },
     {
-      title: 'Corporation',
+      title: 'Corporation \n(S corp or C corp)',
       description: 'Establish a separate legal entity with potential tax advantages and growth opportunities.',
       path: '/business/corporation',
-      price: 'Starting at $149 + state fees',
+      price: 'Starting at $0 + state fees',
       features: [
         'Strongest liability protection',
         'Ability to raise capital',
@@ -29,15 +29,27 @@ const BusinessFormation = () => {
       ]
     },
     {
-      title: 'DBA (Doing Business As)',
+      title: 'DBA \n(Doing Business As)',
       description: 'Operate under a different name without forming a new business entity.',
       path: '/business/dba',
-      price: 'Starting at $49 + state fees',
+      price: 'Starting at $0 + state fees',
       features: [
         'Quick and simple process',
         'No new entity required',
         'Operate under a different name',
         'Maintain existing business structure'
+      ]
+    },
+    {
+      title: 'Nonprofit \n(501c3)',
+      description: 'Operate under a different name without forming a new business entity.',
+      path: '/business/nonprofit',
+      price: 'Starting at $0 + state fees',
+      features: [
+        'lorem ipsum lorem ipsum',
+        'lorem ipsum lorem ipsum lorem ipsum',
+        'lorem ipsum lorem ipsum',
+        'lorem ipsum lorem ipsum'
       ]
     }
   ];
@@ -52,16 +64,15 @@ const BusinessFormation = () => {
       <div className="business-formation">
         <div className="bf-container">
           <div className="bf-header">
-            <h1>Start Your Business</h1>
-            <p>Choose the right business structure for your needs</p>
+            <h1>Start Your Business in Minutes</h1>
           </div>
 
           <div className="business-types-grid">
             {businessTypes.map((type, index) => (
               <div key={index} className="business-type-card">
                 <h3>{type.title}</h3>
-                <p className="description">{type.description}</p>
                 <div className="price">{type.price}</div>
+                <p className="description">{type.description}</p>
                 <ul className="features-list">
                   {type.features.map((feature, idx) => (
                     <li key={idx}>{feature}</li>

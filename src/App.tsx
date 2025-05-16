@@ -19,7 +19,7 @@ const App: React.FC = () => {
           <main className="main-content">
             <AnimatePresence mode="wait">
               <Routes>
-                <Route path="/" element={<Home />} />
+                <Route path="/" element={<BusinessFormation />} />
                 <Route path="/business" element={<BusinessFormation />} />
                 <Route path="/business/llc" element={<Navigate to="/business" />} />
                 <Route path="/business/corporation" element={<Navigate to="/business" />} />
