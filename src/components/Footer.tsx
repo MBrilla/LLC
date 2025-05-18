@@ -8,24 +8,27 @@ const Footer = () => {
         <div className="footer-section">
           <h3>Company</h3>
           <ul>
-            <li><Link to="/about">About Us</Link></li>
+            <li><Link to="/about">About</Link></li>
             <li><Link to="/careers">Careers</Link></li>
-            <li><Link to="/press">Press</Link></li>
-            <li><Link to="/blog">Blog</Link></li>
+            <li><Link to="/press">Contact</Link></li>
+            <li><Link to="/blog">Investors</Link></li>
+            <li><Link to="/blog">Press</Link></li>
+            <li><Link to="/blog">Partner with us</Link></li>
           </ul>
         </div>
 
         <div className="footer-section">
           <h3>Support</h3>
           <ul>
-            <li><Link to="/help">Help Center</Link></li>
-            <li><Link to="/contact">Contact Us</Link></li>
-            <li><Link to="/faq">FAQs</Link></li>
-            <li><Link to="/feedback">Feedback</Link></li>
+            <li><Link to="/help">Order Status</Link></li>
+            <li><Link to="/contact">Customer Care</Link></li>
+            <li><Link to="/faq">Speak with an Attorney</Link></li>
+            <li><Link to="/feedback">Join our Attorney Network</Link></li>
+            <li><Link to="/feedback">Security</Link></li>
           </ul>
         </div>
 
-        <div className="footer-section">
+       {/*  <div className="footer-section">
           <h3>Learn More</h3>
           <ul>
             <li><Link to="/resources">Resources</Link></li>
@@ -33,7 +36,7 @@ const Footer = () => {
             <li><Link to="/webinars">Webinars</Link></li>
             <li><Link to="/glossary">Legal Glossary</Link></li>
           </ul>
-        </div>
+        </div> */}
 
         <div className="footer-section newsletter">
           <h3>Stay Updated</h3>

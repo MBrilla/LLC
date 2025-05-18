@@ -28,15 +28,15 @@
 
 .business-types-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 1rem;
   margin-bottom: 4rem;
 }
 
 .business-type-card {
   background: white;
-  border-radius: 8px;
-  padding: 2rem;
+  border-radius: 12px;
+  padding: 0.75rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
@@ -51,21 +51,23 @@
 
 .business-type-card h3 {
   color: #2c3e50;
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+  white-space: break-spaces;
+  text-align: left;
 }
 
 .business-type-card .description {
   color: #666;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.75rem;
   line-height: 1.6;
 }
 
 .business-type-card .price {
-  font-size: 1.25rem;
-  color: #00a0e9;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
+  font-size: 0.75rem;
+  color: #687f89;
+  font-weight: 400;
+  margin-bottom: 0.75rem;
 }
 
 .features-list {
