@@ -1,14 +1,15 @@
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import '../styles/BusinessFormation.css';
 
 const BusinessFormation = () => {
+  const navigate = useNavigate();
   const businessTypes = [
     {
       title: 'Limited Liability Company \n(LLC)',
       description: 'Protect your personal assets while maintaining flexibility in management and taxation.',
-      path: '/business/llc',
-      price: 'Starting at $0 + state filing fees',
+      price: 'Starting at $100 + $200 Guam filing fee',
+      type: 'LLC',
       features: [
         'Personal asset protection',
         'Flexible management structure',
@@ -19,8 +20,8 @@ const BusinessFormation = () => {
     {
       title: 'Corporation \n(S corp or C corp)',
       description: 'Establish a separate legal entity with potential tax advantages and growth opportunities.',
-      path: '/business/corporation',
-      price: 'Starting at $0 + state fees',
+      price: 'Starting at $149 + Guam filing fee',
+      type: 'Corporation',
       features: [
         'Strongest liability protection',
         'Ability to raise capital',
@@ -31,8 +32,8 @@ const BusinessFormation = () => {
     {
       title: 'DBA \n(Doing Business As)',
       description: 'Operate under a different name without forming a new business entity.',
-      path: '/business/dba',
-      price: 'Starting at $0 + state fees',
+      price: 'Starting at $99 + Guam filing fee',
+      type: 'DBA',
       features: [
         'Quick and simple process',
         'No new entity required',
@@ -42,14 +43,14 @@ const BusinessFormation = () => {
     },
     {
       title: 'Nonprofit \n(501c3)',
-      description: 'Operate under a different name without forming a new business entity.',
-      path: '/business/nonprofit',
-      price: 'Starting at $0 + state fees',
+      description: 'A structure designed to support a public or social benefit that can be eligible for tax breaks.',
+      price: 'Starting at $99 + Guam filing fee',
+      type: 'Nonprofit',
       features: [
-        'lorem ipsum lorem ipsum',
-        'lorem ipsum lorem ipsum lorem ipsum',
-        'lorem ipsum lorem ipsum',
-        'lorem ipsum lorem ipsum'
+        'Tax-exempt status',
+        'Eligible for grants',
+        'Public benefit focus',
+        'Limited liability protection'
       ]
     }
   ];
@@ -78,7 +79,9 @@ const BusinessFormation = () => {
                     <li key={idx}>{feature}</li>
                   ))}
                 </ul>
-                <Link to={type.path} className="start-button">Get Started</Link>
+                <button className="start-button" onClick={() => navigate('/form', { state: { businessType: type.type } })}>
+                  Get Started
+                </button>
               </div>
             ))}
           </div>
