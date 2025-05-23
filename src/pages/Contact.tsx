@@ -1,14 +1,14 @@
-import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Form, Input, Button, message } from 'antd';
-import { PhoneOutlined, MailOutlined, UserOutlined, MessageOutlined } from '@ant-design/icons';
+import { MailOutlined, UserOutlined } from '@ant-design/icons';
 import '../styles/Contact.css';
 
 const Contact = () => {
   const [form] = Form.useForm();
 
   const onFinish = (values: any) => {
-    console.log('Form values:', values);
+    const mailtoLink = `mailto:support@llc671.com?subject=Contact Form: ${values.name}&body=Name: ${values.name}%0D%0AEmail: ${values.email}%0D%0A%0D%0AMessage:%0D%0A${values.message}`;
+    window.location.href = mailtoLink;
     message.success('Thank you for your message. We will get back to you soon!');
     form.resetFields();
   };
@@ -16,16 +16,16 @@ const Contact = () => {
   return (
     <>
       <Helmet>
-        <title>Contact Us - LegalZoom Clone</title>
+        <title>Contact Us - LLC 671</title>
         <meta name="description" content="Get in touch with our team for any questions about starting your business." />
       </Helmet>
 
       <div className="contact-page">
         <div className="contact-container">
           <h1>Get in Touch</h1>
-          <p className="phone-number">
-            <PhoneOutlined style={{ marginRight: '8px' }} />
-            Call us at: 555-123-4567
+          <p className="email-address">
+            <MailOutlined style={{ marginRight: '8px' }} />
+            Email us at: support@llc671.com
           </p>
           
           <Form

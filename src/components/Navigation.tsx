@@ -4,6 +4,7 @@ import { Menu, Button, Drawer, Space } from 'antd';
 import { MenuOutlined, CloseOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import '../styles/Navigation.css';
+import logo from '../assets/Logo2.png';
 
 const Navigation: React.FC = () => {
   const [mobileMenuVisible, setMobileMenuVisible] = useState(false);
@@ -15,12 +16,8 @@ const Navigation: React.FC = () => {
       label: <Link to="/business-formation">Start a Business</Link>,
     },
     {
-      key: '/about',
-      label: <Link to="/about">About Us</Link>,
-    },
-    {
       key: '/contact',
-      label: <Link to="/contact">Contact Us (555-123-4567)</Link>,
+      label: <Link to="/contact">Contact Us</Link>,
     },
   ];
 
@@ -36,7 +33,7 @@ const Navigation: React.FC = () => {
     <nav className="main-nav">
       <div className="nav-container">
         <Link to="/" className="logo">
-          <img src="/logo.png" alt="logo" />
+          <img src={logo} alt="logo" />
         </Link>
 
         {/* Desktop Menu */}
@@ -66,7 +63,7 @@ const Navigation: React.FC = () => {
         <Drawer
           title={
             <div className="drawer-header">
-              <img src="/logo.png" alt="LegalZoom Clone" className="drawer-logo" />
+              <img src={logo} alt="LegalZoom Clone" className="drawer-logo" />
               <Button
                 type="text"
                 icon={<CloseOutlined />}

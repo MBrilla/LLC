@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Steps, Button, Typography, Form, Input, Select, Space, Descriptions, List, Spin, Alert, Card, Divider, Row, Col, Progress } from 'antd';
+import { Steps, Button, Typography, Form, Input, Select, Space, Descriptions, List, Spin, Alert, Card, Divider, Row, Col, Progress, message } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowRightOutlined, ArrowLeftOutlined, CheckCircleOutlined, UserOutlined, BankOutlined, DollarOutlined, FileTextOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import '../styles/Form.css';
@@ -25,6 +25,7 @@ const FormPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const initialBusinessType = location.state?.businessType || 'LLC';
+  const [form] = Form.useForm();
 
   // Form state
   const [businessInfo, setBusinessInfo] = useState({
@@ -45,29 +46,45 @@ const FormPage = () => {
     setOwners(owners.map((owner, i) => i === idx ? { ...owner, [field]: value } : owner));
   };
 
-  // Stripe payment handler
-  const handleStripeCheckout = async () => {
+  // Form submission handler
+  const handleSubmit = async () => {
     setLoading(true);
     setError(null);
+
     try {
-      const res = await fetch('/api/create-checkout-session', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          businessType: businessInfo.businessType,
-          businessInfo,
-          owners
-        }),
+      // Prepare the data for Formspree
+      const baseData = {
+        ...businessInfo,
+      };
+      // Flatten owners array for Formspree
+      const ownerData: Record<string, string> = {};
+      owners.forEach((owner, idx) => {
+        ownerData[`owner${idx + 1}_name`] = owner.name;
+        ownerData[`owner${idx + 1}_email`] = owner.email;
+        ownerData[`owner${idx + 1}_phone`] = owner.phone;
       });
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        setError(data.error || 'Failed to create Stripe session.');
-        setLoading(false);
+      const formData = { ...baseData, ...ownerData };
+
+      // Send to Formspree
+      const response = await fetch('https://formspree.io/f/xaneygnv', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send form');
       }
-    } catch (err: any) {
-      setError(err.message || 'Failed to create Stripe session.');
+
+      message.success('Form submitted successfully! We will contact you shortly.');
+      navigate('/business-formation');
+    } catch (err) {
+      setError('Failed to submit form. Please try again.');
+      message.error('Failed to submit form. Please try again.');
+    } finally {
       setLoading(false);
     }
   };
@@ -76,13 +93,13 @@ const FormPage = () => {
   const renderBusinessForm = () => {
     switch (businessInfo.businessType) {
       case 'LLC':
-        return <LLCForm onValuesChange={setBusinessInfo} initialValues={businessInfo} />;
+        return <LLCForm onValuesChange={values => setBusinessInfo(prev => ({ ...prev, ...values }))} initialValues={businessInfo} />;
       case 'Corporation':
-        return <CorporationForm onValuesChange={setBusinessInfo} initialValues={businessInfo} />;
+        return <CorporationForm onValuesChange={values => setBusinessInfo(prev => ({ ...prev, ...values }))} initialValues={businessInfo} />;
       case 'Nonprofit':
-        return <NonprofitForm onValuesChange={setBusinessInfo} initialValues={businessInfo} />;
+        return <NonprofitForm onValuesChange={values => setBusinessInfo(prev => ({ ...prev, ...values }))} initialValues={businessInfo} />;
       case 'DBA':
-        return <DBAForm onValuesChange={setBusinessInfo} initialValues={businessInfo} />;
+        return <DBAForm onValuesChange={values => setBusinessInfo(prev => ({ ...prev, ...values }))} initialValues={businessInfo} />;
       default:
         return null;
     }
@@ -209,42 +226,17 @@ const FormPage = () => {
           />
         </Card>
       ),
-    },
-    {
-      title: 'Payment',
-      icon: <DollarOutlined />,
-      content: (
-        <Card className="form-card">
-          <div style={{ textAlign: 'center' }}>
-            <Title level={3}>Complete Your Purchase</Title>
-            <Descriptions 
-              bordered 
-              column={1} 
-              size="middle" 
-              style={{ marginBottom: 24 }}
-              className="payment-descriptions"
-            >
-              <Descriptions.Item label="Business Type">{businessInfo.businessType}</Descriptions.Item>
-              <Descriptions.Item label="Total Amount">$299.00</Descriptions.Item>
-            </Descriptions>
-            {error && <Alert type="error" message={error} style={{ marginBottom: 16 }} />}
-            <Button 
-              type="primary" 
-              size="large" 
-              onClick={handleStripeCheckout} 
-              disabled={loading}
-              icon={<DollarOutlined />}
-              style={{ minWidth: 200 }}
-            >
-              {loading ? <Spin /> : 'Pay with Card'}
-            </Button>
-          </div>
-        </Card>
-      ),
-    },
+    }
   ];
 
-  const next = () => setCurrent(current + 1);
+  const next = () => {
+    if (current === steps.length - 1) {
+      handleSubmit();
+    } else {
+      setCurrent(current + 1);
+    }
+  };
+
   const prev = () => setCurrent(current - 1);
 
   return (
@@ -286,24 +278,14 @@ const FormPage = () => {
           >
             Previous
           </Button>
-          {current < steps.length - 1 && (
-            <Button 
-              type="primary" 
-              onClick={next}
-              icon={<ArrowRightOutlined />}
-            >
-              Next
-            </Button>
-          )}
-          {current === steps.length - 1 && (
-            <Button 
-              type="primary" 
-              onClick={() => navigate('/')}
-              icon={<CheckCircleOutlined />}
-            >
-              Finish
-            </Button>
-          )}
+          <Button 
+            type="primary" 
+            onClick={next}
+            icon={current === steps.length - 1 ? <CheckCircleOutlined /> : <ArrowRightOutlined />}
+            loading={loading}
+          >
+            {current === steps.length - 1 ? 'Submit' : 'Next'}
+          </Button>
         </div>
       </Card>
     </div>
