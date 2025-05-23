@@ -35,7 +35,7 @@
 
 /* Global Styles */
 body {
-  background-color: var(--background-light);
+  background: #fff !important;
   color: var(--text-color);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
@@ -123,6 +123,6 @@ body {
 
 .main-content {
   flex: 1;
-  background: var(--background-light);
+  background: #fff;
   padding: var(--spacing-xl) 0;
 } 

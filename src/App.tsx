@@ -4,7 +4,6 @@ import { Layout, ConfigProvider, theme } from 'antd';
 import { HelmetProvider } from 'react-helmet-async';
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
-import Home from './pages/Home';
 import BusinessFormation from './pages/BusinessFormation';
 import Form from './pages/Form';
 import AttorneyDirectory from './pages/AttorneyDirectory';
@@ -16,8 +15,19 @@ import Contact from './pages/Contact';
 import About from './pages/About';
 import NotFound from './pages/NotFound';
 import './styles/theme.css';
+import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const { Content } = Layout;
+
+// ScrollToTop component
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
 
 const App: React.FC = () => {
   return (
@@ -37,6 +47,7 @@ const App: React.FC = () => {
         }}
       >
         <Router>
+          <ScrollToTop />
           <Layout className="layout">
             <Navigation />
             <Content className="main-content">
