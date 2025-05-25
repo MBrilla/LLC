@@ -86,7 +86,7 @@ const BusinessFormation = () => {
             ))}
           </div>
 
-          <div className="bf-features">
+          <div className="why-choose-us">
             <h2>Why Form Your Business With Us</h2>
             <div className="features-grid">
               <div className="feature-item">
@@ -102,9 +102,20 @@ const BusinessFormation = () => {
                 <p>Access to legal and business resources</p>
               </div>
             </div>
+            <div className="why-choose-blurb">
+              <p className="intro">Forming a Guam LLC shouldn't require hiring a pricey lawyer or wasting hours at the Guam Department of Revenue and Taxation. LLC 671 makes it simple — no legal jargon, no government lines, no stress.</p>
+              <p className="process">You answer a few questions. We prepare and file your documents — fast, accurate, and at a fraction of the cost.</p>
+              <p className="skip">Skip the lawyer. Skip the line. Start your business smarter.</p>
+              <p className="final">LLC 671 — Guam's local, affordable LLC formation service.</p>
+            </div>
           </div>
         </div>
       </div>
+      <div>
+      <footer className="bf-footer">
+        <p>LLC 671 is not a law firm and does not provide legal advice. We prepare and file documents based on information you provide.</p>
+      </footer>
+    </div>
     </>
   );
 };

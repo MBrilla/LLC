@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Steps, Button, Typography, Form, Input, Select, Space, Descriptions, List, Spin, Alert, Card, Divider, Row, Col, Progress, message } from 'antd';
+import { useState } from 'react';
+import { Steps, Button, Typography, Form, Input, Descriptions, List, Card, Divider, Row, Col, Progress, message } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ArrowRightOutlined, ArrowLeftOutlined, CheckCircleOutlined, UserOutlined, BankOutlined, DollarOutlined, FileTextOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { ArrowRightOutlined, ArrowLeftOutlined, CheckCircleOutlined, UserOutlined, BankOutlined, FileTextOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import '../styles/Form.css';
 
 // Import form components
@@ -11,21 +11,12 @@ import NonprofitForm from '../components/forms/NonprofitForm';
 import DBAForm from '../components/forms/DBAForm';
 
 const { Title, Text } = Typography;
-const { Option } = Select;
-
-const businessTypeOptions = [
-  { label: 'LLC', value: 'LLC' },
-  { label: 'Corporation', value: 'Corporation' },
-  { label: 'Nonprofit', value: 'Nonprofit' },
-  { label: 'DBA', value: 'DBA' },
-];
 
 const FormPage = () => {
   const [current, setCurrent] = useState(0);
   const location = useLocation();
   const navigate = useNavigate();
   const initialBusinessType = location.state?.businessType || 'LLC';
-  const [form] = Form.useForm();
 
   // Form state
   const [businessInfo, setBusinessInfo] = useState({
@@ -37,7 +28,6 @@ const FormPage = () => {
     { name: '', email: '', phone: '' }
   ]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   // Handlers for dynamic owner fields
   const addOwner = () => setOwners([...owners, { name: '', email: '', phone: '' }]);
@@ -49,13 +39,15 @@ const FormPage = () => {
   // Form submission handler
   const handleSubmit = async () => {
     setLoading(true);
-    setError(null);
 
     try {
       // Prepare the data for Formspree
-      const baseData = {
-        ...businessInfo,
-      };
+      let formData: Record<string, any> = { ...businessInfo };
+      // If businessPurposeOther is present, use it as businessPurpose and keep the dropdown value as businessPurposeDropdown
+      if ((businessInfo as any)['businessPurposeOther']) {
+        formData.businessPurposeDropdown = (businessInfo as any)['businessPurpose'];
+        formData.businessPurpose = (businessInfo as any)['businessPurposeOther'];
+      }
       // Flatten owners array for Formspree
       const ownerData: Record<string, string> = {};
       owners.forEach((owner, idx) => {
@@ -63,10 +55,10 @@ const FormPage = () => {
         ownerData[`owner${idx + 1}_email`] = owner.email;
         ownerData[`owner${idx + 1}_phone`] = owner.phone;
       });
-      const formData = { ...baseData, ...ownerData };
+      formData = { ...formData, ...ownerData };
 
       // Send to Formspree
-      const response = await fetch('https://formspree.io/f/xaneygnv', {
+      const response = await fetch('https://formspree.io/f/xanogobz', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -82,7 +74,6 @@ const FormPage = () => {
       message.success('Form submitted successfully! We will contact you shortly.');
       navigate('/business-formation');
     } catch (err) {
-      setError('Failed to submit form. Please try again.');
       message.error('Failed to submit form. Please try again.');
     } finally {
       setLoading(false);
