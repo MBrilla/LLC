@@ -8,7 +8,7 @@ const BusinessFormation = () => {
     {
       title: 'Limited Liability Company \n(LLC)',
       description: 'Protect your personal assets while maintaining flexibility in management and taxation.',
-      price: 'Starting at $100 + $200 Guam filing fee',
+      price: '$100 + $250 Guam filing fee',
       type: 'LLC',
       features: [
         'Personal asset protection',
@@ -20,7 +20,7 @@ const BusinessFormation = () => {
     {
       title: 'Corporation \n(S corp or C corp)',
       description: 'Establish a separate legal entity with potential tax advantages and growth opportunities.',
-      price: 'Starting at $149 + Guam filing fee',
+      price: '$149 + $300 Guam filing fee',
       type: 'Corporation',
       features: [
         'Strongest liability protection',
@@ -32,7 +32,7 @@ const BusinessFormation = () => {
     {
       title: 'DBA \n(Doing Business As)',
       description: 'Operate under a different name without forming a new business entity.',
-      price: 'Starting at $99 + Guam filing fee',
+      price: '$99 + $25 Guam filing fee',
       type: 'DBA',
       features: [
         'Quick and simple process',
@@ -44,7 +44,7 @@ const BusinessFormation = () => {
     {
       title: 'Nonprofit \n(501c3)',
       description: 'A structure designed to support a public or social benefit that can be eligible for tax breaks.',
-      price: 'Starting at $99 + Guam filing fee',
+      price: '$149 + $300 Guam filing fee',
       type: 'Nonprofit',
       features: [
         'Tax-exempt status',
@@ -98,8 +98,8 @@ const BusinessFormation = () => {
                 <p>Quick and efficient business formation</p>
               </div>
               <div className="feature-item">
-                <h3>Ongoing Support</h3>
-                <p>Access to legal and business resources</p>
+                <h3>Competitive Pricing</h3>
+                <p>Affordable rates without compromising quality</p>
               </div>
             </div>
             <div className="why-choose-blurb">
