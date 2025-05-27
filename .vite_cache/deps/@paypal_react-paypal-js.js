@@ -1,7 +1,9 @@
 import {
-  __toESM,
   require_react
-} from "./chunk-KRQVU3GS.js";
+} from "./chunk-UMBEC6V5.js";
+import {
+  __toESM
+} from "./chunk-ROME4SDB.js";
 
 // node_modules/@paypal/react-paypal-js/dist/esm/react-paypal-js.js
 var import_react = __toESM(require_react());
