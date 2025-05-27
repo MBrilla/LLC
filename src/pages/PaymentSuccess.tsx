@@ -1,22 +1,82 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Result, Button, Descriptions, List, Typography, Card, Divider } from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import jsPDF from 'jspdf';
 import logo from '../assets/Logo2.png';
 import dayjs from 'dayjs';
+import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
+import { PAYPAL_CLIENT_ID, PAYPAL_CURRENCY, PAYPAL_STYLE, BUSINESS_PRICING } from '../config/paypal';
+import '../styles/Form.css';
+
+// Import form components
+import LLCForm from '../components/forms/LLCForm';
+import CorporationForm from '../components/forms/CorporationForm';
+import NonprofitForm from '../components/forms/NonprofitForm';
+import DBAForm from '../components/forms/DBAForm.tsx';
 
 const { Title, Text } = Typography;
+
+interface BusinessInfo {
+  businessName: string;
+  businessAddress: string;
+  businessType: string;
+  businessPurpose: string;
+  legalBusinessName: string;
+  businessStartDate: Date | null;
+  [key: string]: any;
+}
+
+interface Owner {
+  name: string;
+  email: string;
+  phone: string;
+}
+
+interface AddOn {
+  key: string;
+  name: string;
+  price: number;
+  details: string;
+  businessTypes?: string[]; // Optional: specify if add-on is only for certain business types
+}
+
+const ADD_ONS: AddOn[] = [
+  {
+    key: 'operatingAgreement',
+    name: 'Operating Agreement (LLC)',
+    price: 50,
+    details: 'Custom auto-generated document',
+    businessTypes: ['LLC'],
+  },
+  {
+    key: 'einApplication',
+    name: 'EIN Application (IRS)',
+    price: 50,
+    details: 'IRS Form SS-4 filing',
+  },
+  {
+    key: 'rushProcessing',
+    name: 'Internal Rush Processing',
+    price: 50,
+    details: 'Next-business-day handling',
+  },
+  {
+    key: 'printedCopies',
+    name: 'Printed & Mailed Copies',
+    price: 15,
+    details: 'Hard copy with postage',
+  },
+];
 
 const PaymentSuccess: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { businessInfo, owners, selectedAddOns, totalAmount, userEmail } = location.state || {};
 
+  // Helper function to format date values
   const formatDate = (date: any) => {
     if (!date) return '';
     try {
-      console.log('Date value:', date, 'Type:', typeof date);
-      
       // If it's already a formatted string, return it
       if (typeof date === 'string') {
         return date;
@@ -50,76 +110,166 @@ const PaymentSuccess: React.FC = () => {
 
   const handleDownloadInvoice = async () => {
     const doc = new jsPDF();
-    // Add logo with correct size
+    
+    // Load brand color (assuming primary color is brand color)
+    const brandColor = '#002D62'; // Primary color from theme.css
+
+    // Add logo
     const img = new window.Image();
     img.src = logo;
     await new Promise(resolve => { img.onload = resolve; });
     const aspectRatio = img.naturalWidth / img.naturalHeight;
-    // 200px ≈ 53mm (jsPDF default units are mm)
-    const logoHeight = 53;
+    const logoHeight = 20;
     const logoWidth = logoHeight * aspectRatio;
-    doc.addImage(img, 'PNG', 10, 8, logoWidth, logoHeight);
-    doc.setFontSize(16);
-    doc.text('LLC 671 - Invoice', 10 + logoWidth + 5, 20); // Place to the right of the logo
+    doc.addImage(img, 'PNG', 15, 15, logoWidth, logoHeight);
+
+    // Add Invoice Title
+    doc.setFontSize(24);
+    doc.setTextColor(brandColor);
+    doc.text('INVOICE', 15 + logoWidth + 10, 25);
+
     doc.setFontSize(12);
-    let y = 8 + logoHeight + 10;
+    doc.setTextColor(0);
+    let y = 15 + logoHeight + 15; // Start position below logo and title
 
-    // Add fields to PDF based on businessInfo, only if they have a value
-    if (businessInfo?.businessType) { doc.text(`Business Type: ${businessInfo.businessType}`, 10, y); y += 10; }
-    if (businessInfo?.underlyingBusinessType) { doc.text(`Underlying Business Type: ${businessInfo.underlyingBusinessType}`, 10, y); y += 10; }
-    if (businessInfo?.businessName) { doc.text(`DBA Name: ${businessInfo.businessName}`, 10, y); y += 10; }
-    if (businessInfo?.businessAddress) { doc.text(`Business Address: ${businessInfo.businessAddress}`, 10, y); y += 10; }
-    if (businessInfo?.businessPurpose) { 
-      let purposeText = `Business Purpose: ${businessInfo.businessPurpose}`;
-      if (businessInfo.businessPurposeOther) {
-        purposeText += ` - ${businessInfo.businessPurposeOther}`;
+    // Business Information Section
+    doc.setFontSize(14);
+    doc.setTextColor(brandColor);
+    doc.text('Business Information', 15, y);
+    y += 8;
+    doc.setLineWidth(0.5);
+    doc.line(15, y, 195, y); // Underline section title
+    y += 8;
+    doc.setFontSize(12);
+    doc.setTextColor(0);
+
+    const addInfoLine = (label: string, value: any) => {
+      if (value !== null && value !== undefined && value !== '') {
+        let displayValue = value;
+        // Handle date values specifically
+        if (label.toLowerCase().includes('date')) {
+          displayValue = formatDate(value); // Use the formatDate helper
+        } else if (typeof value === 'object') {
+           // For complex objects, you might want to display a specific property or just indicate presence
+           displayValue = JSON.stringify(value); // Simple stringify for now
+        }
+        doc.text(`${label}: ${displayValue}`, 15, y);
+        y += 7; // Reduced spacing for lines within a section
       }
-      doc.text(purposeText, 10, y); y += 10; 
-    }
-    if (businessInfo?.legalBusinessName) { doc.text(`Legal Business Name: ${businessInfo.legalBusinessName}`, 10, y); y += 10; }
-    if (businessInfo?.businessStartDate) { doc.text(`Business Start Date: ${formatDate(businessInfo.businessStartDate)}`, 10, y); y += 10; }
+    };
     
-    // Add business type specific fields for PDF
-    if (businessInfo?.underlyingBusinessType === 'Individual/Sole Proprietorship' && businessInfo?.soleProprietorName) {
-      doc.text(`Sole Proprietor Name: ${businessInfo.soleProprietorName}`, 10, y); y += 10;
-    }
-     if (businessInfo?.underlyingBusinessType === 'Limited Liability Company (LLC)' && businessInfo?.registeredAgentName) {
-      doc.text(`Registered Agent Name: ${businessInfo.registeredAgentName}`, 10, y); y += 10;
-    }
-     if (businessInfo?.underlyingBusinessType === 'Limited Liability Company (LLC)' && businessInfo?.registeredAgentAddress) {
-      doc.text(`Registered Agent Address: ${businessInfo.registeredAgentAddress}`, 10, y); y += 10;
-    }
+    // Use addInfoLine for all business info fields
+    addInfoLine('Business Type', businessInfo?.businessType);
+    addInfoLine('Underlying Business Type', businessInfo?.underlyingBusinessType);
+    addInfoLine('DBA Name', businessInfo?.businessName);
+    addInfoLine('Legal Business Name', businessInfo?.legalBusinessName);
+    addInfoLine('Business Address', businessInfo?.businessAddress);
+    addInfoLine('Registered Agent Name', businessInfo?.registeredAgentName);
+    addInfoLine('Registered Agent Address', businessInfo?.registeredAgentAddress);
+    addInfoLine('Business Purpose', businessInfo?.businessPurpose);
+    addInfoLine('Business Start Date', businessInfo?.businessStartDate);
+    addInfoLine('Sole Proprietor Name', businessInfo?.soleProprietorName);
+    addInfoLine('Contact Email', userEmail);
+    
+    y += 10; // Space after Business Info section
 
-    if (userEmail) { doc.text(`Contact Email: ${userEmail}`, 10, y); y += 10; }
-    
-    if (owners && owners.length > 0) {
-      doc.text('Owners:', 10, y); y += 5;
-      (owners || []).forEach((owner: any, idx: number) => {
-        if (owner.name) doc.text(`Owner ${idx + 1} Name: ${owner.name}`, 15, y); else return;
-        y += 5;
-        if (owner.email) doc.text(`Owner ${idx + 1} Email: ${owner.email}`, 15, y); else return;
-        y += 5;
-        if (owner.phone) doc.text(`Owner ${idx + 1} Phone: ${owner.phone}`, 15, y); else return;
-        y += 5;
+    // Owner(s) Information Section
+    if (owners && owners.length > 0 && owners.some(owner => owner.name)) {
+      doc.setFontSize(14);
+      doc.setTextColor(brandColor);
+      doc.text('Owner(s) Information', 15, y);
+      y += 8;
+      doc.setLineWidth(0.5);
+      doc.line(15, y, 195, y); // Underline section title
+      y += 8;
+      doc.setFontSize(12);
+      doc.setTextColor(0);
+
+      (owners || []).forEach((owner: Owner, idx: number) => {
+        if (owner.name) {
+          doc.text(`Owner ${idx + 1}: ${owner.name}`, 15, y);
+          y += 7;
+          if (owner.email) { doc.text(`Email: ${owner.email}`, 20, y); y += 7; }
+          if (owner.phone) { doc.text(`Phone: ${owner.phone}`, 20, y); y += 7; }
+          y += 3; // Small space between owners
+        }
       });
+      y += 7; // Space after Owners Info section
     }
 
+    // Order Summary Section (using manual table-like structure)
+    doc.setFontSize(14);
+    doc.setTextColor(brandColor);
+    doc.text('Order Summary', 15, y);
+    y += 8;
+    doc.setLineWidth(0.5);
+    doc.line(15, y, 195, y); // Underline section title
+    y += 8;
+    doc.setFontSize(12);
+    doc.setTextColor(0);
+
+    const tableStartX = 15;
+    const itemColX = tableStartX;
+    const priceColX = 150;
+    const lineHeight = 7;
+
+    // Table Headers
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Item', itemColX, y);
+    doc.text('Price', priceColX, y);
+    y += lineHeight;
+    doc.setLineWidth(0.2);
+    doc.line(itemColX, y, 195, y); // Header underline
+    y += lineHeight;
+    doc.setFont('helvetica', 'normal');
+
+    // Base Fees
+    if (businessInfo?.businessType) {
+      // Ensure BUSINESS_PRICING is accessible
+      const base = BUSINESS_PRICING[businessInfo.businessType] || { service: 0, gov: 0 };
+      doc.text('Service Fee', itemColX, y);
+      doc.text(`$${base.service.toFixed(2)}`, priceColX, y);
+      y += lineHeight;
+      doc.text('Gov\'t Filing Fee', itemColX, y);
+      doc.text(`$${base.gov.toFixed(2)}`, priceColX, y);
+      y += lineHeight;
+    }
+
+    // Add-Ons
     if (selectedAddOns && selectedAddOns.length > 0) {
-      y += 10;
-      doc.text('Add-Ons:', 10, y); y += 5;
-      (selectedAddOns || []).forEach((addonKey: string) => {
-         const addOn = ADD_ONS.find(a => a.key === addonKey);
-         if(addOn) {
-            doc.text(`- ${addOn.name} ($${addOn.price.toFixed(2)})`, 15, y); y += 5;
-         }
+      y += lineHeight; // Space before add-ons list
+      selectedAddOns.forEach((addonKey: string) => {
+        // Ensure ADD_ONS is accessible
+        const addOn = ADD_ONS.find(a => a.key === addonKey);
+        if(addOn) {
+          doc.text(addOn.name, itemColX, y);
+          doc.text(`$${addOn.price.toFixed(2)}`, priceColX, y);
+          y += lineHeight;
+        }
       });
     }
-    
-    y += 10; // Add extra space before total
+
+    y += 5; // Space before total line
+    doc.setLineWidth(0.5);
+    doc.line(itemColX, y, 195, y); // Line before total
+    y += lineHeight;
+
+    // Total Amount
     if (totalAmount !== undefined && totalAmount !== null) {
-        doc.text(`Total Paid: $${totalAmount.toFixed(2)}`, 10, y); y += 10;
+      doc.setFontSize(14);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Total Paid', itemColX, y);
+      doc.text(`$${totalAmount.toFixed(2)}`, priceColX, y);
+      y += lineHeight;
     }
-    
+
+    // Footer
+    y += 20;
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.text('LLC 671 - Thank you for your business!', 15, y);
+
     doc.save('LLC671-Invoice.pdf');
   };
 
@@ -229,13 +379,5 @@ const PaymentSuccess: React.FC = () => {
     </Card>
   );
 };
-
-// Assume ADD_ONS is defined elsewhere or import it
-const ADD_ONS = [
-  { key: 'operatingAgreement', name: 'Operating Agreement (LLC)', price: 50, details: 'Custom auto-generated document', businessTypes: ['LLC'] },
-  { key: 'einApplication', name: 'EIN Application (IRS)', price: 50, details: 'IRS Form SS-4 filing' },
-  { key: 'rushProcessing', name: 'Internal Rush Processing', price: 50, details: 'Next-business-day handling' },
-  { key: 'printedCopies', name: 'Printed & Mailed Copies', price: 15, details: 'Hard copy with postage' },
-];
 
 export default PaymentSuccess; 

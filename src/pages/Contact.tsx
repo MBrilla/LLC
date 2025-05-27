@@ -4,7 +4,7 @@ import { MailOutlined, UserOutlined, CheckCircleTwoTone } from '@ant-design/icon
 import { useState } from 'react';
 import '../styles/Contact.css';
 
-const FORMSPREE_ENDPOINT = process.env.REACT_APP_FORMSPREE_ENDPOINT;
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xjkwnyzv';
 
 const Contact = () => {
   const [form] = Form.useForm();
@@ -17,7 +17,6 @@ const Contact = () => {
     setError(null);
     setSuccess(false);
     try {
-      if (!FORMSPREE_ENDPOINT) throw new Error('Formspree endpoint is not set in environment variables.');
       const response = await fetch(FORMSPREE_ENDPOINT, {
         method: 'POST',
         headers: {

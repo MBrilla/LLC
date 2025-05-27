@@ -240,9 +240,7 @@ const FormPage = () => {
       });
       formData = { ...formData, ...ownerData, selectedAddOns };
       // Send to Formspree
-      const formspreeEndpoint = process.env.REACT_APP_FORMSPREE_ENDPOINT;
-      if (!formspreeEndpoint) throw new Error('Formspree endpoint is not set in environment variables.');
-      const response = await fetch(formspreeEndpoint, {
+      const response = await fetch('https://formspree.io/f/xjkwnyzv', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
