@@ -6,13 +6,7 @@ import Navigation from './components/Navigation';
 import Footer from './components/Footer';
 import BusinessFormation from './pages/BusinessFormation';
 import Form from './pages/Form';
-import AttorneyDirectory from './pages/AttorneyDirectory';
-import LegalPlan from './pages/LegalPlan';
-import LegalHelp from './pages/LegalHelp';
-import IntellectualProperty from './pages/IntellectualProperty';
-import WillsTrusts from './pages/WillsTrusts';
 import Contact from './pages/Contact';
-import About from './pages/About';
 import NotFound from './pages/NotFound';
 import './styles/theme.css';
 import { useLocation } from 'react-router-dom';
@@ -55,13 +49,7 @@ const App: React.FC = () => {
                 <Route path="/" element={<Navigate to="/business-formation" replace />} />
                 <Route path="/business-formation" element={<BusinessFormation />} />
                 <Route path="/form" element={<Form />} />
-                <Route path="/attorney-directory" element={<AttorneyDirectory />} />
-                <Route path="/legal-plan" element={<LegalPlan />} />
-                <Route path="/legal-help" element={<LegalHelp />} />
-                <Route path="/intellectual-property" element={<IntellectualProperty />} />
-                <Route path="/wills-trusts" element={<WillsTrusts />} />
                 <Route path="/contact" element={<Contact />} />
-                <Route path="/about" element={<About />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Content>
