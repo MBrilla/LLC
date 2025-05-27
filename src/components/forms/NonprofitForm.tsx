@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Input, InputNumber, Card, Select } from 'antd';
+import { Form, Input, InputNumber, Select } from 'antd';
 
 const { Option } = Select;
 

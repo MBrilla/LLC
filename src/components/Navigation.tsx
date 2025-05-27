@@ -10,6 +10,9 @@ const Navigation: React.FC = () => {
   const [mobileMenuVisible, setMobileMenuVisible] = useState(false);
   const location = useLocation();
 
+  // Check if we should show the Get Started button
+  const shouldShowGetStarted = !['/form', '/payment-success'].includes(location.pathname);
+
   const menuItems: MenuProps['items'] = [
     {
       key: '/business-formation',
@@ -45,9 +48,11 @@ const Navigation: React.FC = () => {
             className="main-menu"
           />
           <Space className="nav-buttons">
-            <Button type="primary" href="/form">
-              Get Started
-            </Button>
+            {shouldShowGetStarted && (
+              <Button type="primary" href="/form">
+                Get Started
+              </Button>
+            )}
           </Space>
         </div>
 
@@ -85,9 +90,11 @@ const Navigation: React.FC = () => {
             onClick={closeMobileMenu}
           />
           <div className="mobile-buttons">
-            <Button type="primary" block href="/form">
-              Get Started
-            </Button>
+            {shouldShowGetStarted && (
+              <Button type="primary" block href="/form">
+                Get Started
+              </Button>
+            )}
           </div>
         </Drawer>
       </div>

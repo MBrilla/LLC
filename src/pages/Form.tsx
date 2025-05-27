@@ -6,12 +6,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import { PAYPAL_CLIENT_ID, PAYPAL_CURRENCY, PAYPAL_STYLE, BUSINESS_PRICING } from '../config/paypal';
 import '../styles/Form.css';
+import dayjs from 'dayjs';
 
 // Import form components
 import LLCForm from '../components/forms/LLCForm';
 import CorporationForm from '../components/forms/CorporationForm';
 import NonprofitForm from '../components/forms/NonprofitForm';
-import DBAForm from '../components/forms/DBAForm';
+import DBAForm from '../components/forms/DBAForm.tsx';
 
 const { Title, Text } = Typography;
 
@@ -19,6 +20,9 @@ interface BusinessInfo {
   businessName: string;
   businessAddress: string;
   businessType: string;
+  businessPurpose: string;
+  legalBusinessName: string;
+  businessStartDate: Date | null;
   [key: string]: any;
 }
 
@@ -75,20 +79,42 @@ const FormPage = () => {
     businessName: '',
     businessAddress: '',
     businessType: initialBusinessType,
+    businessPurpose: '',
+    legalBusinessName: '',
+    businessStartDate: null,
   });
   const [owners, setOwners] = useState<Owner[]>([
     { name: '', email: '', phone: '' }
   ]);
   const [loading, setLoading] = useState(false);
-  const [saving, setSaving] = useState(false);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
   const [selectedAddOns, setSelectedAddOns] = useState<string[]>([]);
   const [totalAmount, setTotalAmount] = useState<number>(0);
 
-  // Load saved progress when component mounts
-  useEffect(() => {
-    loadProgress();
-  }, []);
+  const renderValue = (key: string, value: any) => {
+    if (value === null || value === undefined) return '';
+    
+    // Handle date values
+    if (key.toLowerCase().includes('date') && value) {
+      if (value.$d) { // Check if it's a dayjs object
+        return value.format('MMMM D, YYYY');
+      }
+      if (value instanceof Date) {
+        return value.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+      }
+      if (typeof value === 'string') {
+        return value;
+      }
+      return '';
+    }
+    
+    // Handle object values
+    if (typeof value === 'object') {
+      return JSON.stringify(value);
+    }
+    
+    return value;
+  };
 
   // Calculate total amount including base price and add-ons
   useEffect(() => {
@@ -99,39 +125,6 @@ const FormPage = () => {
     }, 0);
     setTotalAmount(base.total + addOnsTotal);
   }, [selectedAddOns, businessInfo.businessType]);
-
-  // Save progress to localStorage
-  const saveProgress = () => {
-    setSaving(true);
-    try {
-      localStorage.setItem('businessFormProgress', JSON.stringify({
-        businessInfo,
-        owners,
-        currentStep: current
-      }));
-      message.success('Progress saved successfully');
-    } catch (error) {
-      message.error('Failed to save progress');
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  // Load progress from localStorage
-  const loadProgress = () => {
-    const savedProgress = localStorage.getItem('businessFormProgress');
-    if (savedProgress) {
-      try {
-        const { businessInfo: savedBusinessInfo, owners: savedOwners, currentStep } = JSON.parse(savedProgress);
-        setBusinessInfo(savedBusinessInfo);
-        setOwners(savedOwners);
-        setCurrent(currentStep);
-        message.info('Previous progress loaded');
-      } catch (error) {
-        message.error('Failed to load saved progress');
-      }
-    }
-  };
 
   // Validate business name
   const validateBusinessName = async (name: string) => {
@@ -259,8 +252,6 @@ const FormPage = () => {
       if (!response.ok) {
         throw new Error('Failed to send form');
       }
-      // Clear saved progress
-      localStorage.removeItem('businessFormProgress');
       message.success('Form submitted successfully! We will contact you shortly.');
       navigate('/payment-success', {
         state: {
@@ -286,13 +277,25 @@ const FormPage = () => {
   const renderBusinessForm = () => {
     switch (businessInfo.businessType) {
       case 'LLC':
-        return <LLCForm onValuesChange={values => setBusinessInfo(prev => ({ ...prev, ...values }))} initialValues={businessInfo} />;
+        return <LLCForm 
+          onValuesChange={values => setBusinessInfo(prev => ({ ...prev, ...values }))} 
+          initialValues={businessInfo} />;
       case 'Corporation':
-        return <CorporationForm onValuesChange={values => setBusinessInfo(prev => ({ ...prev, ...values }))} initialValues={businessInfo} />;
+        return <CorporationForm 
+          onValuesChange={values => setBusinessInfo(prev => ({ ...prev, ...values }))} 
+          initialValues={businessInfo} />;
       case 'Nonprofit':
-        return <NonprofitForm onValuesChange={values => setBusinessInfo(prev => ({ ...prev, ...values }))} initialValues={businessInfo} />;
+        return <NonprofitForm 
+          onValuesChange={values => setBusinessInfo(prev => ({ ...prev, ...values }))} 
+          initialValues={businessInfo} />;
       case 'DBA':
-        return <DBAForm onValuesChange={values => setBusinessInfo(prev => ({ ...prev, ...values }))} initialValues={businessInfo} />;
+        return <DBAForm 
+          onValuesChange={values => {
+            // Use a standard merge for DBA form values
+            console.log('Form.tsx: Merging DBA form values', values);
+            setBusinessInfo(prev => ({ ...prev, ...values }));
+          }} 
+          initialValues={businessInfo} />;
       default:
         return null;
     }
@@ -447,7 +450,7 @@ const FormPage = () => {
             >
               {Object.entries(businessInfo).map(([key, value]) => (
                 <Descriptions.Item key={key} label={key.replace(/([A-Z])/g, ' $1').trim()}>
-                  {value}
+                  {renderValue(key, value)}
                 </Descriptions.Item>
               ))}
             </Descriptions>
@@ -619,15 +622,6 @@ const FormPage = () => {
               icon={<ArrowRightOutlined />}
             >
               Next
-            </Button>
-          )}
-          {current < steps.length - 1 && (
-            <Button 
-              style={{ marginLeft: 8 }} 
-              onClick={saveProgress}
-              loading={saving}
-            >
-              Save Progress
             </Button>
           )}
         </div>

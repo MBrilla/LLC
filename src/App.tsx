@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { Layout, ConfigProvider, theme, Spin } from 'antd';
+import { Layout, ConfigProvider, theme, Spin, App as AntdApp } from 'antd';
 import { HelmetProvider } from 'react-helmet-async';
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
@@ -55,25 +55,27 @@ const App: React.FC = () => {
           algorithm: theme.defaultAlgorithm,
         }}
       >
-        <Router>
-          <ScrollToTop />
-          <Layout className="layout">
-            <Navigation />
-            <Content className="main-content">
-              <Suspense fallback={<LoadingFallback />}>
-                <Routes>
-                  <Route path="/" element={<Navigate to="/business-formation" replace />} />
-                  <Route path="/business-formation" element={<BusinessFormation />} />
-                  <Route path="/form" element={<Form />} />
-                  <Route path="/contact" element={<Contact />} />
-                  <Route path="/payment-success" element={<PaymentSuccess />} />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </Suspense>
-            </Content>
-            <Footer />
-          </Layout>
-        </Router>
+        <AntdApp>
+          <Router>
+            <ScrollToTop />
+            <Layout className="layout">
+              <Navigation />
+              <Content className="main-content">
+                <Suspense fallback={<LoadingFallback />}>
+                  <Routes>
+                    <Route path="/" element={<Navigate to="/business-formation" replace />} />
+                    <Route path="/business-formation" element={<BusinessFormation />} />
+                    <Route path="/form" element={<Form />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/payment-success" element={<PaymentSuccess />} />
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </Suspense>
+              </Content>
+              <Footer />
+            </Layout>
+          </Router>
+        </AntdApp>
       </ConfigProvider>
     </HelmetProvider>
   );

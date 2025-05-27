@@ -1,12 +1,6 @@
 import React, { useState } from 'react';
-import { Form, Input, Select, Card } from 'antd';
-
+import { Form, Input, Select, Row, Col } from 'antd';
 const { Option } = Select;
-
-interface LLCFormProps {
-  onValuesChange: (values: any) => void;
-  initialValues?: any;
-}
 
 const businessPurposeOptions = [
   'Administrative and support services',
@@ -36,6 +30,11 @@ const businessPurposeOptions = [
   'Other (please specify)'
 ];
 
+interface LLCFormProps {
+  onValuesChange: (values: any) => void;
+  initialValues?: any;
+}
+
 const LLCForm: React.FC<LLCFormProps> = ({ onValuesChange, initialValues }) => {
   const [selectedPurpose, setSelectedPurpose] = useState(initialValues?.businessPurpose || '');
 
@@ -48,93 +47,103 @@ const LLCForm: React.FC<LLCFormProps> = ({ onValuesChange, initialValues }) => {
         setSelectedPurpose(allValues.businessPurpose);
       }}
     >
-      <Form.Item 
-        label="Business Name" 
-        name="businessName" 
-        rules={[{ required: true, message: 'Please enter the business name' }]}
-      > 
-        <Input size="large" placeholder="Enter your LLC name" />
-      </Form.Item>
-      
-      <Form.Item 
-        label="Business Address" 
-        name="businessAddress" 
-        rules={[{ required: true, message: 'Please enter the business address' }]}
-      > 
-        <Input.TextArea size="large" placeholder="Enter your business address" rows={3} />
-      </Form.Item>
-
-      <Form.Item 
-        label="Registered Agent Name" 
-        name="registeredAgent" 
-        rules={[{ required: true, message: 'Please enter the registered agent name' }]}
-      >
-        <Input size="large" placeholder="Enter registered agent name" />
-      </Form.Item>
-
-      <Form.Item 
-        label="Registered Agent Address" 
-        name="registeredAgentAddress" 
-        rules={[{ required: true, message: 'Please enter the registered agent address' }]}
-      >
-        <Input.TextArea size="large" placeholder="Enter registered agent address" rows={3} />
-      </Form.Item>
-
-      <Form.Item
-        label="Business Purpose"
-        name="businessPurpose"
-        rules={[{ required: true, message: 'Please select a business purpose' }]}
-      >
-        <Select
-          size="large"
-          showSearch
-          placeholder="Select or search business purpose"
-          optionFilterProp="children"
-          filterOption={(input, option) =>
-            String(option?.children).toLowerCase().includes(input.toLowerCase())
-          }
-        >
-          {businessPurposeOptions.map((purpose) => (
-            <Option key={purpose} value={purpose}>
-              {purpose}
-            </Option>
-          ))}
-        </Select>
-      </Form.Item>
-
-      {selectedPurpose === 'Other (please specify)' && (
-        <Form.Item
-          label="Please specify business purpose"
-          name="businessPurposeOther"
-          rules={[{ required: true, message: 'Please specify your business purpose' }]}
-        >
-          <Input size="large" placeholder="Enter your business purpose" />
+      {/* Business Info Section */}
+      <div className="form-section">
+        <div className="form-section-title">Business Info</div>
+        <Form.Item 
+          label="Business Name" 
+          name="businessName" 
+          rules={[{ required: true, message: 'Please enter the business name' }]}
+          className="full-width"
+        > 
+          <Input size="large" placeholder="Enter your LLC name" />
         </Form.Item>
-      )}
+        <Form.Item 
+          label="Business Address" 
+          name="businessAddress" 
+          rules={[{ required: true, message: 'Please enter the business address' }]}
+          className="full-width"
+        > 
+          <Input.TextArea size="large" placeholder="Enter your business address" rows={3} />
+        </Form.Item>
+        <Form.Item 
+          label="Registered Agent Name" 
+          name="registeredAgent" 
+          rules={[{ required: true, message: 'Please enter the registered agent name' }]}
+          className="full-width"
+        >
+          <Input size="large" placeholder="Enter registered agent name" />
+        </Form.Item>
+        <Form.Item 
+          label="Registered Agent Address" 
+          name="registeredAgentAddress" 
+          rules={[{ required: true, message: 'Please enter the registered agent address' }]}
+          className="full-width"
+        >
+          <Input.TextArea size="large" placeholder="Enter registered agent address" rows={3} />
+        </Form.Item>
+      </div>
 
-      <Form.Item 
-        label="Management Type" 
-        name="managementType" 
-        rules={[{ required: true, message: 'Please select management type' }]}
-      >
-        <Select size="large">
-          <Option value="Member-Managed">Member-Managed</Option>
-          <Option value="Manager-Managed">Manager-Managed</Option>
-        </Select>
-      </Form.Item>
-
-      <Form.Item 
-        label="Tax Classification" 
-        name="taxClassification" 
-        rules={[{ required: true, message: 'Please select tax classification' }]}
-      >
-        <Select size="large">
-          <Option value="Single-Member LLC">Single-Member LLC</Option>
-          <Option value="Multi-Member LLC">Multi-Member LLC</Option>
-          <Option value="S Corporation">S Corporation</Option>
-          <Option value="C Corporation">C Corporation</Option>
-        </Select>
-      </Form.Item>
+      {/* Business Details Section */}
+      <div className="form-section">
+        <div className="form-section-title">Business Details</div>
+        <Form.Item 
+          label="Management Type" 
+          name="managementType" 
+          rules={[{ required: true, message: 'Please select management type' }]}
+          className="full-width"
+        >
+          <Select size="large">
+            <Option value="Member-Managed">Member-Managed</Option>
+            <Option value="Manager-Managed">Manager-Managed</Option>
+          </Select>
+        </Form.Item>
+        <Form.Item 
+          label="Tax Classification" 
+          name="taxClassification" 
+          rules={[{ required: true, message: 'Please select tax classification' }]}
+          className="full-width"
+        >
+          <Select size="large">
+            <Option value="Single-Member LLC">Single-Member LLC</Option>
+            <Option value="Multi-Member LLC">Multi-Member LLC</Option>
+            <Option value="S Corporation">S Corporation</Option>
+            <Option value="C Corporation">C Corporation</Option>
+          </Select>
+        </Form.Item>
+        <Form.Item 
+          label="Business Purpose"
+          name="businessPurpose"
+          className="full-width"
+          rules={[{ required: true, message: 'Please select a business purpose' }]}
+        >
+          <Select
+            size="large"
+            showSearch
+            placeholder="Select or search business purpose"
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              String(option?.children).toLowerCase().includes(input.toLowerCase())
+            }
+          >
+            {businessPurposeOptions.map((purpose) => (
+              <Option key={purpose} value={purpose}>
+                {purpose}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
+        {selectedPurpose === 'Other (please specify)' && (
+          <Form.Item
+            label="Please specify business purpose"
+            name="businessPurposeOther"
+            className="full-width"
+            rules={[{ required: true, message: 'Please specify your business purpose' }]}
+          >
+            <Input size="large" placeholder="Enter your business purpose" />
+          </Form.Item>
+        )}
+      </div>
     </Form>
   );
 };
