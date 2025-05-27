@@ -6,7 +6,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import { PAYPAL_CLIENT_ID, PAYPAL_CURRENCY, PAYPAL_STYLE, BUSINESS_PRICING } from '../config/paypal';
 import '../styles/Form.css';
-import dayjs from 'dayjs';
 
 // Import form components
 import LLCForm from '../components/forms/LLCForm';
@@ -241,7 +240,9 @@ const FormPage = () => {
       });
       formData = { ...formData, ...ownerData, selectedAddOns };
       // Send to Formspree
-      const response = await fetch('https://formspree.io/f/xanogobz', {
+      const formspreeEndpoint = process.env.REACT_APP_FORMSPREE_ENDPOINT;
+      if (!formspreeEndpoint) throw new Error('Formspree endpoint is not set in environment variables.');
+      const response = await fetch(formspreeEndpoint, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
