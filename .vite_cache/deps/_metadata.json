@@ -1,116 +1,119 @@
 {
   "hash": "da08214a",
-  "browserHash": "9f346f6f",
+  "browserHash": "f14aadbe",
   "optimized": {
     "react": {
       "src": "../../node_modules/react/index.js",
       "file": "react.js",
-      "fileHash": "1b6499e8",
+      "fileHash": "f36efdd2",
       "needsInterop": true
     },
     "react-dom": {
       "src": "../../node_modules/react-dom/index.js",
       "file": "react-dom.js",
-      "fileHash": "eceec49a",
+      "fileHash": "c254687b",
       "needsInterop": true
     },
     "react/jsx-dev-runtime": {
       "src": "../../node_modules/react/jsx-dev-runtime.js",
       "file": "react_jsx-dev-runtime.js",
-      "fileHash": "930de592",
+      "fileHash": "d9115779",
       "needsInterop": true
     },
     "react/jsx-runtime": {
       "src": "../../node_modules/react/jsx-runtime.js",
       "file": "react_jsx-runtime.js",
-      "fileHash": "9c3bcb06",
+      "fileHash": "c2ac5a34",
       "needsInterop": true
     },
     "@ant-design/icons": {
       "src": "../../node_modules/@ant-design/icons/es/index.js",
       "file": "@ant-design_icons.js",
-      "fileHash": "e0cb06a6",
+      "fileHash": "f0e35f2c",
       "needsInterop": false
     },
     "@paypal/react-paypal-js": {
       "src": "../../node_modules/@paypal/react-paypal-js/dist/esm/react-paypal-js.js",
       "file": "@paypal_react-paypal-js.js",
-      "fileHash": "dbf13480",
+      "fileHash": "164d06b3",
       "needsInterop": false
     },
     "antd": {
       "src": "../../node_modules/antd/es/index.js",
       "file": "antd.js",
-      "fileHash": "c42b88c0",
+      "fileHash": "5d8b5e0f",
       "needsInterop": false
     },
     "framer-motion": {
       "src": "../../node_modules/framer-motion/dist/es/index.mjs",
       "file": "framer-motion.js",
-      "fileHash": "f7613748",
+      "fileHash": "6d850b03",
       "needsInterop": false
     },
     "react-dom/client": {
       "src": "../../node_modules/react-dom/client.js",
       "file": "react-dom_client.js",
-      "fileHash": "71455546",
+      "fileHash": "e96a04f5",
       "needsInterop": true
     },
     "react-helmet-async": {
       "src": "../../node_modules/react-helmet-async/lib/index.module.js",
       "file": "react-helmet-async.js",
-      "fileHash": "8fc028ff",
+      "fileHash": "cb1bf8e0",
       "needsInterop": false
     },
     "react-router-dom": {
       "src": "../../node_modules/react-router-dom/dist/index.js",
       "file": "react-router-dom.js",
-      "fileHash": "8248ca0b",
+      "fileHash": "c2a35590",
       "needsInterop": false
     },
     "jspdf": {
       "src": "../../node_modules/jspdf/dist/jspdf.es.min.js",
       "file": "jspdf.js",
-      "fileHash": "891f16dd",
+      "fileHash": "361c7350",
       "needsInterop": false
     },
     "dayjs": {
       "src": "../../node_modules/dayjs/dayjs.min.js",
       "file": "dayjs.js",
-      "fileHash": "ac716fca",
+      "fileHash": "72715048",
       "needsInterop": true
     },
     "antd/es/form": {
       "src": "../../node_modules/antd/es/form/index.js",
       "file": "antd_es_form.js",
-      "fileHash": "7739db06",
+      "fileHash": "d4af8612",
+      "needsInterop": false
+    },
+    "react-icons/fa": {
+      "src": "../../../../node_modules/react-icons/fa/index.mjs",
+      "file": "react-icons_fa.js",
+      "fileHash": "a6bbd3df",
       "needsInterop": false
     }
   },
   "chunks": {
+    "purify.es-B3AOOFIC": {
+      "file": "purify__es-B3AOOFIC.js"
+    },
     "index.es-6E7HETFU": {
       "file": "index__es-6E7HETFU.js"
-    },
-    "chunk-NKBWXMIR": {
-      "file": "chunk-NKBWXMIR.js"
     },
     "html2canvas.esm-CDRBYIRH": {
       "file": "html2canvas__esm-CDRBYIRH.js"
     },
-    "purify.es-B3AOOFIC": {
-      "file": "purify__es-B3AOOFIC.js"
-    },
-    "chunk-S6OA6RSR": {
-      "file": "chunk-S6OA6RSR.js"
+    "chunk-RW6QRJEX": {
+      "file": "chunk-RW6QRJEX.js"
     },
     "chunk-CDDPM2PX": {
       "file": "chunk-CDDPM2PX.js"
     },
-    "chunk-MVRWV4KT": {
-      "file": "chunk-MVRWV4KT.js"
+    "chunk-2WFENNTE": {
+      "file": "chunk-2WFENNTE.js"
     },
-    "chunk-S32OD2P5": {
-      "file": "chunk-S32OD2P5.js"
+    "chunk-2VGOCOCG": {
+      "file": "chunk-2VGOCOCG.js"
     },
     "chunk-XIM7SJPT": {
       "file": "chunk-XIM7SJPT.js"
@@ -123,6 +126,9 @@
     },
     "chunk-UMBEC6V5": {
       "file": "chunk-UMBEC6V5.js"
+    },
+    "chunk-NKBWXMIR": {
+      "file": "chunk-NKBWXMIR.js"
     },
     "chunk-ROME4SDB": {
       "file": "chunk-ROME4SDB.js"

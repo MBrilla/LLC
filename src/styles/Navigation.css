@@ -23,7 +23,7 @@
 }
 
 .logo img {
-  height: 200px;
+  height: 50px;
   width: auto;
   object-fit: contain;
 }
@@ -75,37 +75,95 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--spacing-md) 0;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: var(--spacing-md);
 }
 
 .drawer-logo {
-  height: 70px;
+  height: 50px;
   width: auto;
   object-fit: contain;
 }
 
 .close-button {
   color: var(--text-color);
+  padding: 8px;
+  margin: -8px;
 }
 
 .mobile-menu {
   border: none;
   font-size: 16px;
+  text-align: center;
 }
 
 .mobile-menu .ant-menu-item {
   padding: var(--spacing-md) var(--spacing-lg);
+  margin: 8px 0;
+  width: 100%;
+  text-align: center;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  background-color: transparent !important;
+  color: var(--text-color) !important;
+  outline: none !important;
+}
+
+.mobile-menu .ant-menu-item:hover {
+  background-color: transparent !important;
+  color: var(--text-color) !important;
+  outline: none !important;
+}
+
+.mobile-menu .ant-menu-item-selected {
+  background-color: transparent !important;
+  color: var(--text-color) !important;
+  outline: none !important;
+}
+
+.mobile-menu .ant-menu-item-selected a {
+  color: var(--text-color) !important;
+}
+
+.mobile-menu .ant-menu-item:active {
+  background-color: transparent !important;
+  color: var(--text-color) !important;
+  outline: none !important;
+}
+
+.mobile-menu .ant-menu-item:hover a,
+.mobile-menu .ant-menu-item:focus a,
+.mobile-menu .ant-menu-item:active a {
+  color: var(--text-color) !important;
+  text-decoration: underline;
+}
+
+.mobile-menu .ant-menu-item-only-child.ant-menu-item-selected {
+  background-color: transparent !important;
+  color: var(--text-color) !important;
+  outline: none !important;
+}
+
+.mobile-menu .ant-menu-item-only-child.ant-menu-item-selected a {
+  color: var(--text-color) !important;
+  text-decoration: none !important;
 }
 
 .mobile-buttons {
   margin-top: var(--spacing-lg);
   padding: 0 var(--spacing-md);
+  display: flex;
+  justify-content: center;
 }
 
 .mobile-buttons .ant-btn {
   height: 44px;
   font-size: 16px;
   font-weight: 500;
+  margin-bottom: var(--spacing-md);
+  width: auto;
 }
 
 @media (max-width: 768px) {
@@ -114,16 +172,146 @@
   }
 
   .mobile-menu-button {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    margin: -8px;
+    color: var(--text-color);
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    right: var(--spacing-md);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1001;
+    border: 1px solid transparent;
+  }
+
+  .mobile-menu-button:hover {
+    background-color: var(--background-light);
+    border-radius: var(--border-radius-md);
+    border-color: var(--border-color);
+  }
+
+  /* New container for the icon */
+  .mobile-menu-icon-container {
+    display: flex; /* Use flex to center the SVG */
+    align-items: center; /* Vertically center SVG */
+    justify-content: center; /* Horizontally center SVG */
+    width: 24px; /* Set explicit dimensions for the container */
+    height: 24px; /* Set explicit dimensions for the container */
+  }
+
+  /* Ensure the SVG within the container is visible and fills it */
+  .mobile-menu-button .anticon,
+  .mobile-menu-button svg { /* Target SVG for react-icons */
+    display: block; /* Ensure icon takes up space */
+    color: var(--text-color); /* Set a clear color for the icon */
+    width: 100%; /* Make SVG fill the container width */
+    height: 100%; /* Make SVG fill the container height */
+    opacity: 1; /* Ensure icon is not transparent */
   }
 
   .nav-container {
     padding: 0 var(--spacing-md);
     height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-right: 0;
+    flex-grow: 1;
+    position: static;
+    left: auto;
+    transform: none;
   }
 
   .logo img {
-    height: 50px;
+    height: 60px;
+  }
+
+  .ant-drawer-content-wrapper {
+    box-shadow: -4px 0 16px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  .ant-drawer-header {
+    padding: var(--spacing-md) var(--spacing-lg) !important;
+    border-bottom: none !important;
+  }
+
+  .ant-drawer-body {
+    padding: var(--spacing-md) var(--spacing-lg) !important;
+  }
+
+  /* Remove Ant Design Menu styles for the mobile drawer */
+  .mobile-menu,
+  .mobile-buttons {
+    display: block;
+    width: 100%;
+  }
+
+  /* Stylize the new barebones menu list */
+  .mobile-menu-list {
+    list-style: none; /* Remove default list bullets */
+    padding: 0; /* Remove default padding */
+    margin: 0; /* Remove default margin */
+  }
+
+  .mobile-menu-list-item {
+    padding: var(--spacing-md) var(--spacing-lg); /* Padding for clickable area */
+    margin: 0; /* Remove vertical margin, use padding in a for spacing */
+    text-align: center; /* Center the text */
+    transition: background-color 0.2s ease; /* Smooth transition for hover effect */
+  }
+
+  .mobile-menu-list-item a {
+    color: var(--text-color); /* Set text color */
+    text-decoration: none; /* Remove default underline */
+    font-size: 16px; /* Match desired font size */
+    display: block; /* Make the link fill the li for easier clicking */
+    width: 100%;
+    /* height: 100%; Removed height 100% to allow padding in li to contribute */
+    padding: var(--spacing-sm) 0; /* Add vertical padding to the link for spacing */
+  }
+
+  .mobile-menu-list-item:hover,
+  .mobile-menu-list-item:focus-within { /* Use focus-within to style li when link is focused */
+    background-color: var(--background-light); /* Subtle background change on hover/focus */
+  }
+
+  .mobile-menu-list-item a:hover,
+  .mobile-menu-list-item a:focus {
+    text-decoration: none; /* Ensure no underline on hover/focus for a */
+    color: var(--text-color); /* Ensure text color doesn't change */
+  }
+
+  .mobile-menu-list-item:active {
+     background-color: rgba(0, 0, 0, 0.05); /* Slightly darker background on active */
+  }
+
+   .mobile-menu-list-item a:active {
+     color: var(--text-color); /* Ensure text color doesn't change on active */
+     background-color: transparent; /* Ensure no background on active link itself */
+     text-decoration: none; /* Ensure no underline on active link */
+  }
+
+  .mobile-buttons {
+    display: block;
+    width: 100%;
+    padding: var(--spacing-md) var(--spacing-lg); /* Add padding to button container */
+  }
+
+  .mobile-buttons .ant-btn {
+    width: 100%;
+    margin-bottom: 0; /* Remove margin bottom if padding is on container */
   }
 }
 

@@ -31,9 +31,22 @@ const businessPurposeOptions = [
   'Other (please specify)'
 ];
 
+interface CorporationFormValues {
+  businessName: string;
+  businessAddress: string;
+  businessPurpose: string;
+  businessPurposeOther?: string;
+  legalBusinessName: string;
+  businessStartDate: Date | null;
+  registeredAgentName?: string;
+  registeredAgentAddress?: string;
+  numberOfShares?: number;
+  parValue?: number;
+}
+
 interface CorporationFormProps {
-  onValuesChange: (values: any) => void;
-  initialValues?: any;
+  onValuesChange: (values: Partial<CorporationFormValues>) => void;
+  initialValues?: Partial<CorporationFormValues>;
 }
 
 const CorporationForm: React.FC<CorporationFormProps> = ({ onValuesChange, initialValues }) => {

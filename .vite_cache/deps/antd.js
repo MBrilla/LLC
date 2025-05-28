@@ -1,8 +1,5 @@
 "use client";
 import {
-  require_dayjs_min
-} from "./chunk-NKBWXMIR.js";
-import {
   CONTAINER_MAX_OFFSET,
   CSSMotionList_default,
   Compact_default,
@@ -133,7 +130,7 @@ import {
   warnContext,
   warning_default as warning_default2,
   zindexContext_default
-} from "./chunk-S6OA6RSR.js";
+} from "./chunk-RW6QRJEX.js";
 import {
   _asyncToGenerator
 } from "./chunk-CDDPM2PX.js";
@@ -184,7 +181,7 @@ import {
   WarningFilled_default,
   ZoomInOutlined_default,
   ZoomOutOutlined_default
-} from "./chunk-MVRWV4KT.js";
+} from "./chunk-2WFENNTE.js";
 import {
   CheckCircleFilled_default,
   CloseCircleFilled_default,
@@ -213,7 +210,7 @@ import {
   useMemo,
   warning,
   warning_default
-} from "./chunk-S32OD2P5.js";
+} from "./chunk-2VGOCOCG.js";
 import {
   _defineProperty
 } from "./chunk-XIM7SJPT.js";
@@ -226,6 +223,9 @@ import {
 import {
   require_react
 } from "./chunk-UMBEC6V5.js";
+import {
+  require_dayjs_min
+} from "./chunk-NKBWXMIR.js";
 import {
   __commonJS,
   __toESM
@@ -1001,7 +1001,7 @@ var Affix = import_react.default.forwardRef((props, ref) => {
   const mergedCls = (0, import_classnames.default)({
     [rootCls]: affixStyle
   });
-  return wrapCSSVar(import_react.default.createElement(es_default3, {
+  return wrapCSSVar(import_react.default.createElement(es_default, {
     onResize: updatePosition
   }, import_react.default.createElement("div", Object.assign({
     style,
@@ -1014,7 +1014,7 @@ var Affix = import_react.default.forwardRef((props, ref) => {
     className: mergedCls,
     ref: fixedNodeRef,
     style: affixStyle
-  }, import_react.default.createElement(es_default3, {
+  }, import_react.default.createElement(es_default, {
     onResize: updatePosition
   }, children)))));
 });
@@ -1395,7 +1395,7 @@ var Alert = React2.forwardRef((props, ref) => {
     }
     return {};
   }, [closable, contextClosable]);
-  return wrapCSSVar(React2.createElement(es_default, {
+  return wrapCSSVar(React2.createElement(es_default2, {
     visible: !closed,
     motionName: `${prefixCls}-motion`,
     motionAppear: false,
@@ -3785,7 +3785,7 @@ var WaveEffect = (props) => {
     return null;
   }
   const isSmallComponent = (component === "Checkbox" || component === "Radio") && (target === null || target === void 0 ? void 0 : target.classList.contains(TARGET_CLS));
-  return React16.createElement(es_default, {
+  return React16.createElement(es_default2, {
     visible: true,
     motionAppear: true,
     motionName: "wave-motion",
@@ -4096,7 +4096,7 @@ var DefaultLoadingIcon = (props) => {
       style
     });
   }
-  return import_react7.default.createElement(es_default, {
+  return import_react7.default.createElement(es_default2, {
     visible,
     // Used for minus flex gap style only
     motionName: `${prefixCls}-loading-icon-motion`,
@@ -4951,7 +4951,7 @@ var CollapsePanel = import_react19.default.forwardRef(function(props, ref) {
     className: "".concat(prefixCls, "-header-text")
   }, collapsible === "header" ? collapsibleProps : {}), header), ifExtraExist && import_react19.default.createElement("div", {
     className: "".concat(prefixCls, "-extra")
-  }, extra)), import_react19.default.createElement(es_default, _extends({
+  }, extra)), import_react19.default.createElement(es_default2, _extends({
     visible: isActive,
     leavedClassName: "".concat(prefixCls, "-content-hidden")
   }, openMotion, {
@@ -6955,7 +6955,7 @@ var Content = React47.forwardRef(function(props, ref) {
     var elementOffset = offset(dialogRef.current);
     setTransformOrigin(mousePosition2 && (mousePosition2.x || mousePosition2.y) ? "".concat(mousePosition2.x - elementOffset.left, "px ").concat(mousePosition2.y - elementOffset.top, "px") : "");
   }
-  return React47.createElement(es_default, {
+  return React47.createElement(es_default2, {
     visible,
     onVisibleChanged,
     onAppearPrepare: onPrepare,
@@ -6985,7 +6985,7 @@ var React48 = __toESM(require_react());
 var import_classnames27 = __toESM(require_classnames());
 var Mask = function Mask2(props) {
   var prefixCls = props.prefixCls, style = props.style, visible = props.visible, maskProps = props.maskProps, motionName = props.motionName, className = props.className;
-  return React48.createElement(es_default, {
+  return React48.createElement(es_default2, {
     key: "mask",
     visible,
     motionName,
@@ -7152,7 +7152,7 @@ var DialogWrap = function DialogWrap2(props) {
   }
   return React50.createElement(RefContext.Provider, {
     value: refContext
-  }, React50.createElement(es_default2, {
+  }, React50.createElement(es_default3, {
     open: visible || forceRender || animatedVisible,
     autoDestroy: false,
     getContainer,
@@ -10396,7 +10396,7 @@ function InternalItem(props, ref) {
     ref
   }), childNode);
   if (responsive) {
-    itemNode = React82.createElement(es_default3, {
+    itemNode = React82.createElement(es_default, {
       onResize: function onResize(_ref) {
         var offsetWidth = _ref.offsetWidth;
         internalRegisterSize(offsetWidth);
@@ -10685,7 +10685,7 @@ function Overflow(props, ref) {
     display: true,
     style: suffixStyle
   }), suffix));
-  return isResponsive ? React86.createElement(es_default3, {
+  return isResponsive ? React86.createElement(es_default, {
     onResize: onOverflowResize,
     disabled: !shouldResponsive
   }, overflowNode) : overflowNode;
@@ -11803,7 +11803,7 @@ var Filler = React96.forwardRef(function(_ref, ref) {
   }
   return React96.createElement("div", {
     style: outerStyle
-  }, React96.createElement(es_default3, {
+  }, React96.createElement(es_default, {
     onResize: function onResize(_ref2) {
       var offsetHeight = _ref2.offsetHeight;
       if (offsetHeight && onInnerResize) {
@@ -13007,7 +13007,7 @@ function RawList(props, ref) {
       position: "relative"
     }),
     className: mergedClassName
-  }, containerProps, restProps), React105.createElement(es_default3, {
+  }, containerProps, restProps), React105.createElement(es_default, {
     onResize: onHolderResize
   }, React105.createElement(Component6, {
     className: "".concat(prefixCls, "-holder"),
@@ -16148,7 +16148,7 @@ var Avatar = React124.forwardRef((props, ref) => {
       WebkitTransform: transformString,
       transform: transformString
     };
-    childrenToRender = React124.createElement(es_default3, {
+    childrenToRender = React124.createElement(es_default, {
       onResize: setScaleParam
     }, React124.createElement("span", {
       className: `${prefixCls}-string`,
@@ -16782,7 +16782,7 @@ var BackTop = (props) => {
     className: classString,
     onClick: scrollToTop,
     ref
-  }), React128.createElement(es_default, {
+  }), React128.createElement(es_default2, {
     visible,
     motionName: `${rootPrefixCls}-fade`
   }, (_ref) => {
@@ -17549,7 +17549,7 @@ var InternalBadge = React132.forwardRef((props, ref) => {
   }, restProps, {
     className: badgeClassName,
     style: Object.assign(Object.assign({}, (_e = badge === null || badge === void 0 ? void 0 : badge.styles) === null || _e === void 0 ? void 0 : _e.root), styles === null || styles === void 0 ? void 0 : styles.root)
-  }), children, React132.createElement(es_default, {
+  }), children, React132.createElement(es_default2, {
     visible: !isHidden,
     motionName: `${prefixCls}-zoom`,
     motionAppear: false,
@@ -18711,7 +18711,7 @@ function InlineSubMenuList(_ref) {
   return React151.createElement(InheritableContextProvider, {
     mode: fixedMode,
     locked: !sameModeRef.current
-  }, React151.createElement(es_default, _extends({
+  }, React151.createElement(es_default2, _extends({
     visible: mergedOpen
   }, mergedMotion, {
     forceRender: forceSubMenuRender,
@@ -25208,7 +25208,7 @@ function Popup2(props) {
       style: {
         left: arrowOffset
       }
-    }), React205.createElement(es_default3, {
+    }), React205.createElement(es_default, {
       onResize
     }, renderNode));
   }
@@ -25784,7 +25784,7 @@ function RangeSelector(props, ref) {
   var showClear = clearIcon && (value[0] && !disabled[0] || value[1] && !disabled[1]);
   var startAutoFocus = autoFocus && !disabled[0];
   var endAutoFocus = autoFocus && !startAutoFocus && !disabled[1];
-  return React210.createElement(es_default3, {
+  return React210.createElement(es_default, {
     onResize: syncActiveOffset
   }, React210.createElement("div", _extends({}, rootProps, {
     className: (0, import_classnames95.default)(prefixCls, "".concat(prefixCls, "-range"), _defineProperty(_defineProperty(_defineProperty(_defineProperty({}, "".concat(prefixCls, "-focused"), focused), "".concat(prefixCls, "-disabled"), disabled.every(function(i) {
@@ -31312,7 +31312,7 @@ var TabNavList = React230.forwardRef(function(props, ref) {
     pingTop = transformTop < 0;
     pingBottom = transformTop !== transformMin;
   }
-  return React230.createElement(es_default3, {
+  return React230.createElement(es_default, {
     onResize: onListHolderResize
   }, React230.createElement("div", {
     ref: useComposeRef(ref, containerRef),
@@ -31328,12 +31328,12 @@ var TabNavList = React230.forwardRef(function(props, ref) {
     position: "left",
     extra,
     prefixCls
-  }), React230.createElement(es_default3, {
+  }), React230.createElement(es_default, {
     onResize: onListHolderResize
   }, React230.createElement("div", {
     className: (0, import_classnames104.default)(wrapPrefix, _defineProperty(_defineProperty(_defineProperty(_defineProperty({}, "".concat(wrapPrefix, "-ping-left"), pingLeft), "".concat(wrapPrefix, "-ping-right"), pingRight), "".concat(wrapPrefix, "-ping-top"), pingTop), "".concat(wrapPrefix, "-ping-bottom"), pingBottom)),
     ref: tabsWrapperRef
-  }, React230.createElement(es_default3, {
+  }, React230.createElement(es_default, {
     onResize: onListHolderResize
   }, React230.createElement("div", {
     ref: tabListRef,
@@ -31433,7 +31433,7 @@ var TabPanelList = function TabPanelList2(props) {
   }, tabs.map(function(item) {
     var key = item.key, forceRender = item.forceRender, paneStyle = item.style, paneClassName = item.className, itemDestroyInactiveTabPane = item.destroyInactiveTabPane, restTabProps = _objectWithoutProperties(item, _excluded38);
     var active = key === activeKey;
-    return React233.createElement(es_default, _extends({
+    return React233.createElement(es_default2, _extends({
       key,
       visible: active,
       forceRender,
@@ -38833,7 +38833,7 @@ function MotionThumb(props) {
   if (!prevStyle || !nextStyle) {
     return null;
   }
-  return React274.createElement(es_default, {
+  return React274.createElement(es_default2, {
     visible: true,
     motionName,
     motionAppear: true,
@@ -46161,7 +46161,7 @@ function DrawerPopup(props, ref) {
       parentContext === null || parentContext === void 0 || (_parentContext$pull2 = parentContext.pull) === null || _parentContext$pull2 === void 0 || _parentContext$pull2.call(parentContext);
     };
   }, []);
-  var maskNode = mask && React329.createElement(es_default, _extends({
+  var maskNode = mask && React329.createElement(es_default2, _extends({
     key: "mask"
   }, maskMotion, {
     visible: open3
@@ -46205,7 +46205,7 @@ function DrawerPopup(props, ref) {
     onKeyDown: onKeyDown2,
     onKeyUp
   };
-  var panelNode = React329.createElement(es_default, _extends({
+  var panelNode = React329.createElement(es_default2, _extends({
     key: "panel"
   }, motionProps, {
     visible: open3,
@@ -46326,7 +46326,7 @@ var Drawer = function Drawer2(props) {
   }, eventHandlers);
   return React330.createElement(RefContext2.Provider, {
     value: refContext
-  }, React330.createElement(es_default2, {
+  }, React330.createElement(es_default3, {
     open: mergedOpen || forceRender || animatedVisible,
     autoDestroy: false,
     getContainer,
@@ -48023,7 +48023,7 @@ var BackTop2 = import_react119.default.forwardRef((props, ref) => {
     type,
     shape: mergedShape
   }, restProps);
-  return import_react119.default.createElement(es_default, {
+  return import_react119.default.createElement(es_default2, {
     visible,
     motionName: `${rootPrefixCls}-fade`
   }, (_ref, setRef) => {
@@ -48158,7 +48158,7 @@ var FloatButtonGroup = (props) => {
     // Hover trigger
     onMouseEnter,
     onMouseLeave
-  }, isMenuMode ? import_react120.default.createElement(import_react120.default.Fragment, null, import_react120.default.createElement(es_default, {
+  }, isMenuMode ? import_react120.default.createElement(import_react120.default.Fragment, null, import_react120.default.createElement(es_default2, {
     visible: open3,
     motionName: `${groupPrefixCls}-wrap`
   }, (_ref) => {
@@ -48379,12 +48379,12 @@ var Operations = function Operations2(props) {
   var toolbarNode = React345.createElement("div", {
     className: "".concat(prefixCls, "-operations")
   }, flipYNode, flipXNode, rotateLeftNode, rotateRightNode, zoomOutNode, zoomInNode);
-  return React345.createElement(es_default, {
+  return React345.createElement(es_default2, {
     visible,
     motionName: maskTransitionName
   }, function(_ref2) {
     var className = _ref2.className, style = _ref2.style;
-    return React345.createElement(es_default2, {
+    return React345.createElement(es_default3, {
       open: true,
       getContainer: getContainer !== null && getContainer !== void 0 ? getContainer : document.body
     }, React345.createElement("div", {
@@ -50611,7 +50611,7 @@ var ResizableTextArea = React358.forwardRef(function(props, ref) {
     mergedStyle.overflowY = "hidden";
     mergedStyle.overflowX = "hidden";
   }
-  return React358.createElement(es_default3, {
+  return React358.createElement(es_default, {
     onResize: onInternalResize,
     disabled: !(autoSize || onResize)
   }, React358.createElement("textarea", _extends({}, restProps, {
@@ -62143,7 +62143,7 @@ function MeasureCell(_ref) {
       onColumnResize(columnKey, cellRef.current.offsetWidth);
     }
   }, []);
-  return React428.createElement(es_default3, {
+  return React428.createElement(es_default, {
     data: columnKey
   }, React428.createElement("td", {
     ref: cellRef,
@@ -62172,7 +62172,7 @@ function MeasureRow(_ref) {
       fontSize: 0
     },
     ref
-  }, React429.createElement(es_default3.Collection, {
+  }, React429.createElement(es_default.Collection, {
     onBatchResize: function onBatchResize(infoList) {
       if (isVisible_default(ref.current)) {
         infoList.forEach(function(_ref2) {
@@ -63574,7 +63574,7 @@ function Table(tableProps, ref) {
     className: "".concat(prefixCls, "-footer")
   }, footer(mergedData)));
   if (horizonScroll) {
-    fullTable = React442.createElement(es_default3, {
+    fullTable = React442.createElement(es_default, {
       onResize: onFullTableResize
     }, fullTable);
   }
@@ -65377,7 +65377,7 @@ var MotionTreeNode = React456.forwardRef(function(oriProps, ref) {
     }
   };
   if (motionNodes) {
-    return React456.createElement(es_default, _extends({
+    return React456.createElement(es_default2, _extends({
       ref,
       visible
     }, motion2, {
@@ -71533,7 +71533,7 @@ var Mask3 = function Mask4(props) {
     width: "100vw",
     height: "100vh"
   };
-  return import_react166.default.createElement(es_default2, {
+  return import_react166.default.createElement(es_default3, {
     open: open3,
     autoLock: true
   }, import_react166.default.createElement("div", {
@@ -71845,7 +71845,7 @@ var Tour = function Tour2(props) {
     zIndex,
     getTriggerDOMNode,
     arrow: !!mergedArrow
-  }), React482.createElement(es_default2, {
+  }), React482.createElement(es_default3, {
     open: mergedOpen,
     autoLock: true
   }, React482.createElement("div", {
@@ -75973,7 +75973,7 @@ var Base = React513.forwardRef((props, ref) => {
     "aria-hidden": true,
     key: "ellipsis"
   }, ELLIPSIS_STR), ellipsisConfig.suffix, renderOperations(canEllipsis)];
-  return React513.createElement(es_default3, {
+  return React513.createElement(es_default, {
     onResize,
     disabled: !mergedEnableEllipsis
   }, (resizeRef) => React513.createElement(EllipsisTooltip_default, {
@@ -77639,7 +77639,7 @@ var ListItem2 = React520.forwardRef((_ref, ref) => {
   const rootPrefixCls = getPrefixCls();
   const dom = React520.createElement("div", {
     className: listItemClassName
-  }, icon, fileName, downloadOrDelete, pictureCardActions, showProgress && React520.createElement(es_default, {
+  }, icon, fileName, downloadOrDelete, pictureCardActions, showProgress && React520.createElement(es_default2, {
     motionName: `${rootPrefixCls}-fade`,
     visible: mergedStatus === "uploading",
     motionDeadline: 2e3
@@ -77831,7 +77831,7 @@ var InternalUploadList = (props, ref) => {
       onDownload: onInternalDownload,
       onClose: onInternalClose
     });
-  }), appendAction && React521.createElement(es_default, Object.assign({}, motionConfig, {
+  }), appendAction && React521.createElement(es_default2, Object.assign({}, motionConfig, {
     visible: appendActionVisible,
     forceRender: true
   }), (_ref2) => {
@@ -79543,7 +79543,7 @@ var Splitter = (props) => {
     return mergedSizes;
   }, [itemPtgSizes]);
   const mergedStyle = Object.assign(Object.assign({}, contextStyle), style);
-  return wrapCSSVar(import_react184.default.createElement(es_default3, {
+  return wrapCSSVar(import_react184.default.createElement(es_default, {
     onResize: onContainerResize
   }, import_react184.default.createElement("div", {
     style: mergedStyle,

@@ -6,13 +6,19 @@ import '../styles/Contact.css';
 
 const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xjkwnyzv';
 
+interface ContactFormValues {
+  name: string;
+  email: string;
+  message: string;
+}
+
 const Contact = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const onFinish = async (values: any) => {
+  const onFinish = async (values: ContactFormValues) => {
     setLoading(true);
     setError(null);
     setSuccess(false);
@@ -28,8 +34,9 @@ const Contact = () => {
       if (!response.ok) throw new Error('Failed to send message');
       setSuccess(true);
       form.resetFields();
-    } catch (err) {
-      setError('Failed to send message. Please try again.');
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to send message';
+      setError(`${errorMessage}. Please try again.`);
     } finally {
       setLoading(false);
     }

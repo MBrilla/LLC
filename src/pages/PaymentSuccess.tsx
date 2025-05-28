@@ -1,18 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Result, Button, Descriptions, List, Typography, Card, Divider } from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import jsPDF from 'jspdf';
 import logo from '../assets/Logo2.png';
 import dayjs from 'dayjs';
-import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
-import { PAYPAL_CLIENT_ID, PAYPAL_CURRENCY, PAYPAL_STYLE, BUSINESS_PRICING } from '../config/paypal';
+import { BUSINESS_PRICING } from '../config/paypal';
 import '../styles/Form.css';
-
-// Import form components
-import LLCForm from '../components/forms/LLCForm';
-import CorporationForm from '../components/forms/CorporationForm';
-import NonprofitForm from '../components/forms/NonprofitForm';
-import DBAForm from '../components/forms/DBAForm.tsx';
 
 const { Title, Text } = Typography;
 
@@ -23,7 +16,16 @@ interface BusinessInfo {
   businessPurpose: string;
   legalBusinessName: string;
   businessStartDate: Date | null;
-  [key: string]: any;
+  underlyingBusinessType?: string;
+  registeredAgentName?: string;
+  registeredAgentAddress?: string;
+  soleProprietorName?: string;
+  businessPurposeOther?: string;
+  managementType?: string;
+  taxClassification?: string;
+  corporateType?: string;
+  numberOfShares?: number;
+  parValue?: number;
 }
 
 interface Owner {
@@ -37,7 +39,7 @@ interface AddOn {
   name: string;
   price: number;
   details: string;
-  businessTypes?: string[]; // Optional: specify if add-on is only for certain business types
+  businessTypes?: string[];
 }
 
 const ADD_ONS: AddOn[] = [
@@ -72,9 +74,11 @@ const PaymentSuccess: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { businessInfo, owners, selectedAddOns, totalAmount, userEmail } = location.state || {};
+  const typedBusinessInfo = businessInfo as BusinessInfo | undefined;
+  const typedSelectedAddOns = selectedAddOns as string[] | undefined;
 
   // Helper function to format date values
-  const formatDate = (date: any) => {
+  const formatDate = (date: Date | string | number | dayjs.Dayjs | null | undefined) => {
     if (!date) return '';
     try {
       // If it's already a formatted string, return it
@@ -83,9 +87,9 @@ const PaymentSuccess: React.FC = () => {
       }
 
       // If it's a dayjs object or has dayjs properties
-      if (date && (typeof date.format === 'function' || date.$isDayjsObject || date.$d)) {
+      if (date && (typeof (date as dayjs.Dayjs).format === 'function' || (date as any).$isDayjsObject || (date as any).$d)) {
         // Create a new dayjs instance from the date value
-        const dayjsDate = dayjs(date.$d || date);
+        const dayjsDate = dayjs((date as any).$d || date);
         return dayjsDate.format('MMMM D, YYYY');
       }
 
@@ -153,28 +157,38 @@ const PaymentSuccess: React.FC = () => {
            // For complex objects, you might want to display a specific property or just indicate presence
            displayValue = JSON.stringify(value); // Simple stringify for now
         }
+        // Handle number values with specific formatting if needed (e.g., currency for parValue)
+        if (typeof value === 'number' && label.toLowerCase().includes('value')) {
+           displayValue = `$${value.toFixed(2)}`;
+        }
+
         doc.text(`${label}: ${displayValue}`, 15, y);
         y += 7; // Reduced spacing for lines within a section
       }
     };
     
     // Use addInfoLine for all business info fields
-    addInfoLine('Business Type', businessInfo?.businessType);
-    addInfoLine('Underlying Business Type', businessInfo?.underlyingBusinessType);
-    addInfoLine('DBA Name', businessInfo?.businessName);
-    addInfoLine('Legal Business Name', businessInfo?.legalBusinessName);
-    addInfoLine('Business Address', businessInfo?.businessAddress);
-    addInfoLine('Registered Agent Name', businessInfo?.registeredAgentName);
-    addInfoLine('Registered Agent Address', businessInfo?.registeredAgentAddress);
-    addInfoLine('Business Purpose', businessInfo?.businessPurpose);
-    addInfoLine('Business Start Date', businessInfo?.businessStartDate);
-    addInfoLine('Sole Proprietor Name', businessInfo?.soleProprietorName);
+    addInfoLine('Business Type', typedBusinessInfo?.businessType);
+    addInfoLine('Underlying Business Type', typedBusinessInfo?.underlyingBusinessType);
+    addInfoLine('Business Name', typedBusinessInfo?.businessName);
+    addInfoLine('Legal Business Name', typedBusinessInfo?.legalBusinessName);
+    addInfoLine('Business Address', typedBusinessInfo?.businessAddress);
+    addInfoLine('Registered Agent Name', typedBusinessInfo?.registeredAgentName);
+    addInfoLine('Registered Agent Address', typedBusinessInfo?.registeredAgentAddress);
+    addInfoLine('Business Purpose', typedBusinessInfo?.businessPurpose);
+    addInfoLine('Business Start Date', typedBusinessInfo?.businessStartDate);
+    addInfoLine('Sole Proprietor Name', typedBusinessInfo?.soleProprietorName);
+    addInfoLine('Management Type', typedBusinessInfo?.managementType);
+    addInfoLine('Tax Classification', typedBusinessInfo?.taxClassification);
+    addInfoLine('Corporate Type', typedBusinessInfo?.corporateType);
+    addInfoLine('Number of Shares Authorized', typedBusinessInfo?.numberOfShares);
+    addInfoLine('Par Value per Share', typedBusinessInfo?.parValue);
     addInfoLine('Contact Email', userEmail);
     
     y += 10; // Space after Business Info section
 
     // Owner(s) Information Section
-    if (owners && owners.length > 0 && owners.some(owner => owner.name)) {
+    if (owners && owners.length > 0 && owners.some((owner: Owner) => owner.name)) {
       doc.setFontSize(14);
       doc.setTextColor(brandColor);
       doc.text('Owner(s) Information', 15, y);
@@ -225,9 +239,9 @@ const PaymentSuccess: React.FC = () => {
     doc.setFont('helvetica', 'normal');
 
     // Base Fees
-    if (businessInfo?.businessType) {
+    if (typedBusinessInfo?.businessType) {
       // Ensure BUSINESS_PRICING is accessible
-      const base = BUSINESS_PRICING[businessInfo.businessType] || { service: 0, gov: 0 };
+      const base = BUSINESS_PRICING[typedBusinessInfo.businessType] || { service: 0, gov: 0 };
       doc.text('Service Fee', itemColX, y);
       doc.text(`$${base.service.toFixed(2)}`, priceColX, y);
       y += lineHeight;
@@ -237,9 +251,9 @@ const PaymentSuccess: React.FC = () => {
     }
 
     // Add-Ons
-    if (selectedAddOns && selectedAddOns.length > 0) {
+    if (typedSelectedAddOns && typedSelectedAddOns.length > 0) {
       y += lineHeight; // Space before add-ons list
-      selectedAddOns.forEach((addonKey: string) => {
+      typedSelectedAddOns.forEach((addonKey: string) => {
         // Ensure ADD_ONS is accessible
         const addOn = ADD_ONS.find(a => a.key === addonKey);
         if(addOn) {
@@ -275,11 +289,11 @@ const PaymentSuccess: React.FC = () => {
 
   useEffect(() => {
     // Only auto-download invoice if businessInfo exists
-    if (businessInfo) {
+    if (typedBusinessInfo) {
        handleDownloadInvoice();
     }
     // eslint-disable-next-line
-  }, [businessInfo]); // Depend on businessInfo
+  }, [typedBusinessInfo]); // Depend on typedBusinessInfo
 
   return (
     <Card style={{ maxWidth: 600, margin: '40px auto' }}>
@@ -302,28 +316,47 @@ const PaymentSuccess: React.FC = () => {
       <Divider />
       <Title level={4}>Order Details</Title>
       <Descriptions bordered column={1}>
-        {businessInfo?.businessType && (<Descriptions.Item label="Business Type">{businessInfo.businessType}</Descriptions.Item>)}
-        {businessInfo?.underlyingBusinessType && (<Descriptions.Item label="Underlying Business Type">{businessInfo.underlyingBusinessType}</Descriptions.Item>)}
-        {businessInfo?.businessName && (<Descriptions.Item label="DBA Name">{businessInfo.businessName}</Descriptions.Item>)}
-        {businessInfo?.businessAddress && (<Descriptions.Item label="Business Address">{businessInfo.businessAddress}</Descriptions.Item>)}
-        {businessInfo?.businessPurpose && (
+        {typedBusinessInfo?.businessType && (<Descriptions.Item label="Business Type">{typedBusinessInfo.businessType}</Descriptions.Item>)}
+        {typedBusinessInfo?.underlyingBusinessType && (<Descriptions.Item label="Underlying Business Type">{typedBusinessInfo.underlyingBusinessType}</Descriptions.Item>)}
+        {typedBusinessInfo?.businessName && (<Descriptions.Item label="Business Name">{typedBusinessInfo.businessName}</Descriptions.Item>)}
+        {typedBusinessInfo?.businessAddress && (<Descriptions.Item label="Business Address">{typedBusinessInfo.businessAddress}</Descriptions.Item>)}
+        {typedBusinessInfo?.businessPurpose && (
           <Descriptions.Item label="Business Purpose">
-            {businessInfo.businessPurpose}
-            {businessInfo.businessPurposeOther && ` - ${businessInfo.businessPurposeOther}`}
+            {typedBusinessInfo.businessPurpose}
+            {typedBusinessInfo.businessPurposeOther && ` - ${typedBusinessInfo.businessPurposeOther}`}
           </Descriptions.Item>
         )}
-        {businessInfo?.legalBusinessName && (<Descriptions.Item label="Legal Business Name">{businessInfo.legalBusinessName}</Descriptions.Item>)}
-        {businessInfo?.businessStartDate && (<Descriptions.Item label="Business Start Date">{formatDate(businessInfo.businessStartDate)}</Descriptions.Item>)}
+        {typedBusinessInfo?.legalBusinessName && typedBusinessInfo.legalBusinessName !== '' && (
+           <Descriptions.Item label="Legal Business Name">{typedBusinessInfo.legalBusinessName}</Descriptions.Item>
+        )}
+        {typedBusinessInfo?.businessStartDate && (
+           <Descriptions.Item label="Business Start Date">{formatDate(typedBusinessInfo.businessStartDate)}</Descriptions.Item>
+        )}
         
         {/* Render business type specific fields in summary */}
-        {businessInfo?.underlyingBusinessType === 'Individual/Sole Proprietorship' && businessInfo?.soleProprietorName && (
-           <Descriptions.Item label="Sole Proprietor Name">{businessInfo.soleProprietorName}</Descriptions.Item>
+        {typedBusinessInfo?.underlyingBusinessType === 'Individual/Sole Proprietorship' && typedBusinessInfo?.soleProprietorName && (
+           <Descriptions.Item label="Sole Proprietor Name">{typedBusinessInfo.soleProprietorName}</Descriptions.Item>
         )}
-        {businessInfo?.underlyingBusinessType === 'Limited Liability Company (LLC)' && businessInfo?.registeredAgentName && (
-           <Descriptions.Item label="Registered Agent Name">{businessInfo.registeredAgentName}</Descriptions.Item>
+        {(typedBusinessInfo?.businessType === 'LLC' || typedBusinessInfo?.businessType === 'Corporation') && typedBusinessInfo?.registeredAgentName && (
+           <Descriptions.Item label="Registered Agent Name">{typedBusinessInfo.registeredAgentName}</Descriptions.Item>
         )}
-        {businessInfo?.underlyingBusinessType === 'Limited Liability Company (LLC)' && businessInfo?.registeredAgentAddress && (
-           <Descriptions.Item label="Registered Agent Address">{businessInfo.registeredAgentAddress}</Descriptions.Item>
+        {(typedBusinessInfo?.businessType === 'LLC' || typedBusinessInfo?.businessType === 'Corporation') && typedBusinessInfo?.registeredAgentAddress && (
+           <Descriptions.Item label="Registered Agent Address">{typedBusinessInfo.registeredAgentAddress}</Descriptions.Item>
+        )}
+        {typedBusinessInfo?.businessType === 'LLC' && typedBusinessInfo?.managementType && (
+           <Descriptions.Item label="Management Type">{typedBusinessInfo.managementType}</Descriptions.Item>
+        )}
+        {typedBusinessInfo?.businessType === 'LLC' && typedBusinessInfo?.taxClassification && (
+           <Descriptions.Item label="Tax Classification">{typedBusinessInfo.taxClassification}</Descriptions.Item>
+        )}
+        {typedBusinessInfo?.businessType === 'Corporation' && typedBusinessInfo?.corporateType && (
+           <Descriptions.Item label="Corporate Type">{typedBusinessInfo.corporateType}</Descriptions.Item>
+        )}
+        {typedBusinessInfo?.businessType === 'Corporation' && typedBusinessInfo?.numberOfShares && (
+           <Descriptions.Item label="Number of Shares Authorized">{typedBusinessInfo.numberOfShares}</Descriptions.Item>
+        )}
+        {typedBusinessInfo?.businessType === 'Corporation' && typedBusinessInfo?.parValue !== undefined && typedBusinessInfo?.parValue !== null && (
+           <Descriptions.Item label="Par Value per Share">${typedBusinessInfo.parValue.toFixed(2)}</Descriptions.Item>
         )}
 
         {userEmail && (<Descriptions.Item label="Contact Email">{userEmail}</Descriptions.Item>)}
@@ -333,7 +366,7 @@ const PaymentSuccess: React.FC = () => {
             <List
               size="small"
               dataSource={owners || []}
-              renderItem={(owner: any, idx) => (
+              renderItem={(owner: Owner, idx) => (
                 // Only render if owner name exists
                 owner.name && (
                   <List.Item>
@@ -347,11 +380,11 @@ const PaymentSuccess: React.FC = () => {
           </Descriptions.Item>
         )}
         
-        {(selectedAddOns || []).length > 0 && (
+        {(typedSelectedAddOns || []).length > 0 && (
            <Descriptions.Item label="Add-Ons">
              <List
                size="small"
-               dataSource={selectedAddOns || []}
+               dataSource={typedSelectedAddOns || []}
                renderItem={(addonKey: string) => {
                   const addOn = ADD_ONS.find(a => a.key === addonKey);
                   // Only render if add-on is found
@@ -368,7 +401,7 @@ const PaymentSuccess: React.FC = () => {
         )}
       </Descriptions>
       <Divider />
-      {businessInfo && (
+      {typedBusinessInfo && (
         <Button type="primary" onClick={async () => await handleDownloadInvoice()} style={{ marginTop: 16 }}>
           Download Invoice
         </Button>

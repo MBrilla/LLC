@@ -238,7 +238,38 @@ const FormPage = () => {
         ownerData[`owner${idx + 1}_email`] = owner.email;
         ownerData[`owner${idx + 1}_phone`] = owner.phone;
       });
-      formData = { ...formData, ...ownerData, selectedAddOns };
+      
+      // Define fields expected for each business type
+      const expectedFields: Record<string, string[]> = {
+        'LLC': ['businessName', 'businessAddress', 'managementType', 'taxClassification', 'businessPurpose', 'businessPurposeOther', 'registeredAgentName', 'registeredAgentAddress'],
+        'Corporation': ['businessName', 'businessAddress', 'corporateType', 'businessPurpose', 'businessPurposeOther', 'registeredAgentName', 'registeredAgentAddress', 'numberOfShares', 'parValue'],
+        'DBA': ['businessName', 'businessAddress', 'businessPurpose', 'businessPurposeOther', 'legalBusinessName', 'underlyingBusinessType', 'businessStartDate'],
+        'Nonprofit': ['businessName', 'businessAddress', 'businessPurpose', 'businessPurposeOther'], // Add other fields as needed
+        // Add other business types and their fields here
+      };
+      
+      // Filter formData to include only relevant fields for the current business type
+      const filteredBusinessInfo: Record<string, any> = {};
+      const currentExpectedFields = expectedFields[businessInfo.businessType] || [];
+      
+      currentExpectedFields.forEach(field => {
+        if (formData[field] !== undefined && formData[field] !== null && formData[field] !== '') {
+          // Special handling for date objects from DatePicker
+          if (field.toLowerCase().includes('date') && typeof formData[field].format === 'function') {
+             filteredBusinessInfo[field] = formData[field].format('YYYY-MM-DD'); // Format date as string
+          } else if (field === 'businessPurpose' && formData.businessPurposeDropdown) {
+            // Handle the split business purpose field
+             filteredBusinessInfo.businessPurposeDropdown = formData.businessPurposeDropdown;
+             filteredBusinessInfo.businessPurposeOther = formData.businessPurposeOther;
+          } else if (field !== 'businessPurposeOther' && field !== 'businessPurposeDropdown') {
+             filteredBusinessInfo[field] = formData[field];
+          }
+        }
+      });
+
+      // Re-combine filtered business info with owner and add-on data
+      formData = { ...filteredBusinessInfo, ...ownerData, selectedAddOns };
+
       // Send to Formspree
       const response = await fetch('https://formspree.io/f/xjkwnyzv', {
         method: 'POST',

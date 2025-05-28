@@ -6,6 +6,8 @@ export interface ValidationResponse {
   message?: string;
 }
 
+type DebouncedFunction<T extends (...args: any[]) => any> = (...args: Parameters<T>) => void;
+
 export const validationService = {
   async checkBusinessNameAvailability(name: string): Promise<ValidationResponse> {
     try {
@@ -28,7 +30,10 @@ export const validationService = {
         message: data.available ? undefined : 'This business name is already taken',
       };
     } catch (error) {
-      console.error('Error checking business name:', error);
+      // Log error in development only
+      if (import.meta.env.DEV) {
+        console.error('Error checking business name:', error);
+      }
       return {
         isValid: false,
         message: 'Failed to check business name availability',
@@ -57,7 +62,10 @@ export const validationService = {
         message: data.valid ? undefined : 'Please enter a valid address',
       };
     } catch (error) {
-      console.error('Error validating address:', error);
+      // Log error in development only
+      if (import.meta.env.DEV) {
+        console.error('Error validating address:', error);
+      }
       return {
         isValid: false,
         message: 'Failed to validate address',
@@ -69,7 +77,7 @@ export const validationService = {
   debounce<T extends (...args: any[]) => any>(
     func: T,
     wait: number
-  ): (...args: Parameters<T>) => void {
+  ): DebouncedFunction<T> {
     let timeout: NodeJS.Timeout;
     return (...args: Parameters<T>) => {
       clearTimeout(timeout);

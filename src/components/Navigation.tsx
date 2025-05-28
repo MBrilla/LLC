@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, Button, Drawer, Space } from 'antd';
-import { MenuOutlined, CloseOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import '../styles/Navigation.css';
 import logo from '../assets/Logo2.png';
+import { FaBars } from 'react-icons/fa';
+import { CloseOutlined } from '@ant-design/icons';
 
 const Navigation: React.FC = () => {
   const [mobileMenuVisible, setMobileMenuVisible] = useState(false);
   const location = useLocation();
+  const isMobile = window.innerWidth <= 768;
 
   // Check if we should show the Get Started button
   const shouldShowGetStarted = !['/form', '/payment-success'].includes(location.pathname);
@@ -35,9 +37,15 @@ const Navigation: React.FC = () => {
   return (
     <nav className="main-nav">
       <div className="nav-container">
-        <Link to="/" className="logo">
-          <img src={logo} alt="logo" />
-        </Link>
+        {isMobile ? (
+          <div className="logo">
+            <img src={logo} alt="logo" />
+          </div>
+        ) : (
+          <Link to="/" className="logo">
+            <img src={logo} alt="logo" />
+          </Link>
+        )}
 
         {/* Desktop Menu */}
         <div className="desktop-menu">
@@ -60,7 +68,11 @@ const Navigation: React.FC = () => {
         <Button
           className="mobile-menu-button"
           type="text"
-          icon={<MenuOutlined />}
+          icon={
+            <div className="mobile-menu-icon-container">
+              <FaBars size={24} />
+            </div>
+          }
           onClick={showMobileMenu}
         />
 
@@ -68,10 +80,10 @@ const Navigation: React.FC = () => {
         <Drawer
           title={
             <div className="drawer-header">
-              <img src={logo} alt="LegalZoom Clone" className="drawer-logo" />
+              <img src={logo} alt="LLC-671" className="drawer-logo" />
               <Button
                 type="text"
-                icon={<CloseOutlined />}
+                icon={<CloseOutlined style={{ fontSize: '20px' }} />}
                 onClick={closeMobileMenu}
                 className="close-button"
               />
@@ -81,14 +93,28 @@ const Navigation: React.FC = () => {
           onClose={closeMobileMenu}
           open={mobileMenuVisible}
           className="mobile-drawer"
+          width={280}
         >
-          <Menu
-            mode="vertical"
-            selectedKeys={[location.pathname]}
-            items={menuItems}
-            className="mobile-menu"
-            onClick={closeMobileMenu}
-          />
+          <ul className="mobile-menu-list">
+            {menuItems.map(item => {
+              if (item && 'key' in item && 'label' in item) {
+                const menuItem = item as { key: string; label: React.ReactNode };
+                return (
+                  <li key={menuItem.key} className="mobile-menu-list-item">
+                    {React.isValidElement(menuItem.label) ? (
+                      React.cloneElement(menuItem.label as React.ReactElement, { onClick: closeMobileMenu })
+                    ) : (
+                      <Link to={menuItem.key} onClick={closeMobileMenu}>
+                        {menuItem.label}
+                      </Link>
+                    )}
+                  </li>
+                );
+              }
+              return null;
+            })}
+          </ul>
+
           <div className="mobile-buttons">
             {shouldShowGetStarted && (
               <Button type="primary" block href="/form">
